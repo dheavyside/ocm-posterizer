@@ -1,0 +1,50 @@
+@import '../styles/shared/core';
+
+.modal {
+  background-color: rgb(42, 48, 54);
+  color: whitesmoke;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  visibility: hidden;
+
+  &.visible {
+    visibility: visible;
+  }
+
+  .filter {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+
+    @include break-point(small) {
+      margin-left: 20px;
+      margin-right: 20px;
+      flex-direction: row;
+      justify-content: space-evenly;
+
+      select {
+        -webkit-appearance: none;
+        min-height: 35px;
+        flex-grow: 1;
+        margin-left: 0;
+      }
+      input {
+        flex-grow: 5;
+      }
+    }
+
+    select,
+    input {
+      font-size: 0.8em;
+      padding: 10px 10px;
+      margin: 5px 20px;
+      @include break-point(small) {
+        margin: 5px 5px;
+      }
+    }
+  }
+}

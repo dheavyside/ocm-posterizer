@@ -1,0 +1,174 @@
+@import './mixins';
+@import './theme';
+
+.container {
+  padding: 20px 25px;
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rounded {
+  border-radius: 50%;
+}
+
+.button {
+  background-color: initial;
+  color: whitesmoke;
+  background-image: linear-gradient(-180deg, #252827, #262b29);
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+  font-family: 'Bebas Neue', 'Courier New', Courier, monospace;
+  letter-spacing: 3px;
+  cursor: pointer;
+  display: inline-block;
+  height: 44px;
+  line-height: 44px;
+  outline: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  pointer-events: auto;
+  position: relative;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 100%;
+  @include break-point(small) {
+    width: auto;
+  }
+  z-index: 2;
+  border: 0;
+
+  em {
+    font-style: normal;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    margin-right: 8px;
+  }
+
+  &.success {
+    color: #252827;
+    background-image: linear-gradient(-180deg, #00d775, #00bd68);
+  }
+  &.danger {
+    background-image: linear-gradient(-180deg, #d70056, #bd005b);
+  }
+
+  &:hover {
+    background: #282a29;
+
+    &.success {
+      background: #00bd68;
+    }
+
+    &.danger {
+      background: #bd005b;
+    }
+  }
+}
+
+.mb-medium {
+  margin-bottom: 15px;
+}
+
+.click-through {
+  pointer-events: none;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.rotate {
+  @for $i from 1 through 360 {
+    @include add-deg-rotate($i);
+  }
+}
+
+.height {
+  @for $i from 1 through 150 {
+    @include add-percent-height($i);
+  }
+}
+
+.left {
+  @for $i from -100 through 100 {
+    @include add-left-pos($i);
+  }
+}
+
+.right {
+  @for $i from -100 through 100 {
+    @include add-right-pos($i);
+  }
+}
+
+.top {
+  @for $i from -100 through 100 {
+    @include add-top-pos($i);
+  }
+}
+
+.bottom {
+  @for $i from -100 through 100 {
+    @include add-bottom-pos($i);
+  }
+}
+
+.bg {
+  &-size {
+    &--cover {
+      background-size: cover;
+    }
+  }
+}
+
+.opacity {
+  @for $i from 1 through 100 {
+    @include add-opacity($i);
+  }
+}
+
+.bg-pos-x {
+  @for $i from -100 through 100 {
+    @include add-bg-pos-x($i);
+  }
+  &--left {
+    background-position-x: left;
+  }
+  &--right {
+    background-position-x: right;
+  }
+  &--top {
+    background-position-x: top;
+  }
+  &--bottom {
+    background-position-x: bottom;
+  }
+}
+
+.bg-pos-y {
+  @for $i from -100 through 100 {
+    @include add-bg-pos-y($i);
+  }
+  &--left {
+    background-position-y: left;
+  }
+  &--right {
+    background-position-y: right;
+  }
+  &--top {
+    background-position-y: top;
+  }
+  &--bottom {
+    background-position-y: bottom;
+  }
+}

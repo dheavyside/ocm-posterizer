@@ -1,0 +1,143 @@
+.pillar_full_5x8 {
+  img {
+    height: 12.5%;
+
+    &.secondRow {
+      top: 12.5%;
+    }
+    &.thirdRow {
+      top: 25%;
+    }
+    &.fourthRow {
+      top: 37.5%;
+    }
+    &.fifthRow {
+      top: 50%;
+    }
+    &.sixthRow {
+      top: 62.5%;
+    }
+    &.seventhRow {
+      top: 75%;
+    }
+    &.eigthRow {
+      top: 87.5%;
+    }
+  }
+}
+
+.tower_full_3x6 {
+  img {
+    &.cNft {
+      height: 16.6666%;
+    }
+    &.secondCol {
+      left: 33.3333%;
+    }
+    &.thirdCol {
+      left: 66.6666%;
+    }
+    &.secondRow {
+      top: 16.6666%;
+    }
+    &.thirdRow {
+      top: 33.3332%;
+    }
+    &.fourthRow {
+      top: 49.9998%;
+    }
+    &.fifthRow {
+      top: 66.6664%;
+    }
+    &.sixthRow {
+      top: 83.333%;
+    }
+  }
+}
+
+.square_pfp_split {
+  .split_1_of_2 {
+    overflow: hidden;
+    border-radius: 50%;
+    clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
+  }
+  .split_2_of_2 {
+    overflow: hidden;
+    border-radius: 50%;
+    clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  }
+}
+
+.square_border_centeredpiece {
+  background-color: #4158d0;
+  background-image: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
+
+  img {
+    &.firstRow,
+    &.firstCol {
+      height: 22.5%;
+    }
+    &.secondRow {
+      top: 26.5%;
+      height: 22.5%;
+    }
+    &.thirdRow {
+      top: 51%;
+      height: 22.5%;
+    }
+    &.fourthRow {
+      top: 75.5%;
+      height: 22.5%;
+    }
+    &.secondCol {
+      left: 26.5%;
+      height: 22.5%;
+    }
+    &.thirdCol {
+      left: 51%;
+      height: 22.5%;
+    }
+    &.fourthCol {
+      left: 75.5%;
+      height: 22.5%;
+    }
+
+    &.secondRow {
+      &.secondCol {
+        clip-path: polygon(4% 4%, 48% 4%, 48% 48%, 4% 48%);
+        top: 24.5%;
+        left: 24.5%;
+        height: 51%;
+      }
+    }
+    &.secondRow {
+      &.thirdCol {
+        clip-path: polygon(52% 4%, 96% 4%, 96% 48%, 52% 48%);
+        top: 24.5%;
+        left: 24.5%;
+        height: 51%;
+      }
+    }
+    &.thirdRow {
+      &.secondCol {
+        clip-path: polygon(4% 52%, 48% 52%, 48% 96%, 4% 96%);
+        top: 24.5%;
+        left: 24.5%;
+        height: 51%;
+      }
+    }
+    &.thirdRow {
+      &.thirdCol {
+        clip-path: polygon(52% 52%, 96% 52%, 96% 96%, 52% 96%);
+        top: 24.5%;
+        left: 24.5%;
+        height: 51%;
+      }
+    }
+  }
+}

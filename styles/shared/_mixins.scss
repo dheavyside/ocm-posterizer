@@ -1,0 +1,123 @@
+/*
+ * Usage
+ *
+ * div {
+ *  margin: 5em;
+ *
+ *  @include break-point(large) {
+ *    margin: 7em;
+ *  }
+ * }
+ *
+*/
+@mixin break-point($point) {
+  @if $point == ultrawide {
+    @media only screen and (min-width: 1536px) {
+      @content;
+    }
+  } @else if $point == wide {
+    @media only screen and (min-width: 1280px) {
+      @content;
+    }
+  } @else if $point == large {
+    @media only screen and (min-width: 1024px) {
+      @content;
+    }
+  } @else if $point == medium {
+    @media only screen and (min-width: 900px) {
+      @content;
+    }
+  } @else if $point == small {
+    @media only screen and (min-width: 600px) {
+      @content;
+    }
+  } @else if $point == xsmall {
+    @media only screen and (min-width: 420px) {
+      @content;
+    }
+  }
+}
+
+@mixin add-deg-rotate($argument) {
+  $number: $argument;
+
+  &--#{$number} {
+    transform: rotate(unquote($argument + 'deg'));
+    transition-timing-function: ease-in-out;
+    transition-duration: 300ms;
+  }
+}
+
+@mixin add-percent-height($argument) {
+  $number: $argument;
+
+  &--#{$number} {
+    height: unquote($argument + '%');
+    transition-timing-function: ease-in-out;
+    transition-duration: 300ms;
+  }
+}
+
+@mixin add-top-pos($argument) {
+  $number: $argument;
+
+  &--#{$number} {
+    top: unquote($argument + '%');
+    transition-timing-function: ease-in-out;
+    transition-duration: 300ms;
+  }
+}
+
+@mixin add-bottom-pos($argument) {
+  $number: $argument;
+
+  &--#{$number} {
+    bottom: unquote($argument + '%');
+    transition-timing-function: ease-in-out;
+    transition-duration: 300ms;
+  }
+}
+
+@mixin add-left-pos($argument) {
+  $number: $argument;
+
+  &--#{$number} {
+    left: unquote($argument + '%');
+    transition-timing-function: ease-in-out;
+    transition-duration: 300ms;
+  }
+}
+
+@mixin add-right-pos($argument) {
+  $number: $argument;
+
+  &--#{$number} {
+    right: unquote($argument + '%');
+    transition-timing-function: ease-in-out;
+    transition-duration: 300ms;
+  }
+}
+
+@mixin add-bg-pos-x($argument) {
+  $number: $argument;
+
+  &--#{$number} {
+    background-position-x: unquote($argument + '%');
+  }
+}
+
+@mixin add-bg-pos-y($argument) {
+  $number: $argument;
+
+  &--#{$number} {
+    background-position-y: unquote($argument + '%');
+  }
+}
+
+@mixin add-opacity($argument) {
+  $number: $argument;
+
+  &--#{$number} {
+    opacity: unquote($argument + '%');
+  }
+}

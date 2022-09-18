@@ -1,0 +1,31 @@
+@import './shared/core';
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Bebas Neue', 'Courier New', Courier, monospace;
+  letter-spacing: 3px;
+  overflow-x: hidden;
+  color: #ffffff;
+  background-color: #1d1f24;
+}
+
+a {
+  color: #69f5ff;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: #ffffff;
+    background-color: #1d1f24; //#34363a
+  }
+}
