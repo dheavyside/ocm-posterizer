@@ -118,6 +118,15 @@
       display: none;
     }
   }
+
+  &.wuxga {
+    padding-top: 62.5%;
+    margin-bottom: 25px;
+
+    &::after {
+      display: none;
+    }
+  }
 }
 
 .printing {
@@ -132,6 +141,12 @@
     width: 1000px !important;
     min-width: 1000px;
     max-width: 1000px;
+  }
+
+  &.wuxga_on_print {
+    width: 1970px !important;
+    min-width: 1970px;
+    max-width: 1970px;
   }
 
   .no-print {

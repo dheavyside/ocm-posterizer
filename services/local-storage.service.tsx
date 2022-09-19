@@ -94,6 +94,7 @@ export class LocalStorageService {
     let erc721WhiteList: string[] = [
       'ERC721_SJ',
       'ERC721_OCMONK',
+      'ERC721_KARMA',
       'ERC721_WFNH-BE',
     ];
 

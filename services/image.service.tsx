@@ -14,6 +14,8 @@ import coiwFrame3 from '../public/stickers/coiw-frame-3.svg';
 import coiwFrame4 from '../public/stickers/coiw-frame-4.svg';
 import coiwFrame5 from '../public/stickers/coiw-frame-5.svg';
 
+import ocmWoodenFrame from '../public/stickers/ocmonk-wooden-frame.png';
+
 export class StickerProvider {
   static sjChad = sjChad;
   static sjCyborg = sjCyborg;
@@ -30,4 +32,6 @@ export class StickerProvider {
   static coiwFrame3 = coiwFrame3;
   static coiwFrame4 = coiwFrame4;
   static coiwFrame5 = coiwFrame5;
+
+  static ocmWoodenFrame = ocmWoodenFrame;
 }

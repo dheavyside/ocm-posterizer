@@ -5,6 +5,7 @@ export type tokenCode =
   | 'ERC721_SJ'
   | 'ERC721_COIW'
   | 'ERC721_OCMONK'
+  | 'ERC721_KARMA'
   | 'ERC721_WFNH-BE';
 
 export interface Nft {

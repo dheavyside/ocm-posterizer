@@ -21,6 +21,10 @@ const sizes = [
     label: 'Opensea',
   },
   {
+    size: 'wuxga',
+    label: 'WUXGA',
+  },
+  {
     size: 'square',
     label: 'Square (1:1)',
   },

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import sjLogo from '../public/shonen-junk-logo.svg';
-import wfLogo from '../public/wize-fellaz-logo.png';
+import sjLogo from '../public/sj_logo.svg';
+import wfLogo from '../public/wfnh_be_logo.png';
 
 export default function Footer() {
   return (

@@ -24,5 +24,7 @@ function getImageUrl(code: tokenCode, id: string): string {
       }.png`;
     case 'ERC721_WFNH-BE':
       return WIZEFELLAS_DATA[Number.parseInt(id) - 1];
+    case 'ERC721_KARMA':
+      return `https://karma-dessert.onchainmonkey.com/karma-images/${id}`;
   }
 }

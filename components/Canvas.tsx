@@ -46,6 +46,7 @@ export default function Canvas({
       ['twitter_banner', 1450],
       ['facebook_banner', 1450],
       ['opensea_banner', 1450],
+      ['wuxga', 1920],
       ['square', 950],
       ['pillar', 950],
       ['tower', 950],

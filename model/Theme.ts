@@ -5,6 +5,7 @@ export type ThemeSize =
   | 'twitter_banner'
   | 'facebook_banner'
   | 'opensea_banner'
+  | 'wuxga'
   | 'square'
   | 'pillar'
   | 'tower';

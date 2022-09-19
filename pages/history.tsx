@@ -1,7 +1,6 @@
 import { faTrash, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { LocalStorageService } from '../services/local-storage.service';
 import styles from './history.module.scss';
