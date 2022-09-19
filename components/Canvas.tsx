@@ -153,7 +153,12 @@ export default function Canvas({
           }`}
         >
           <span>Designed by </span>
-          <a href={theme?.author?.url} target='_blank' className='text-sm'>
+          <a
+            href={theme?.author?.url}
+            target='_blank'
+            rel='noreferrer'
+            className='text-sm'
+          >
             <span>{theme?.author?.name}</span>
           </a>
         </div>
