@@ -4,9 +4,45 @@ import styles from './erc721-coiw-theme.module.scss';
 
 const twitterBanners: ITheme[] = [
   {
+    id: 'y95srZ9ZRctzbTU',
+    code: 'ERC721_COIW',
+    name: 'CoiW World 1',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
+    size: 'twitter_banner',
+    classNames: 'twitter-banner',
+    backdrop: {
+      classNames: `bg-coiw-banner-4 bg-size--cover`,
+    },
+    nfts: [
+      {
+        classNames: `hexagon-3 height--50 top--5 left--68`,
+      },
+      {
+        classNames: `hexagon-3 height--50 top--45 left--60`,
+      },
+      {
+        classNames: `hexagon-3 height--50 top--45 left--76`,
+      },
+    ],
+    fgStickers: [
+      {
+        classNames: 'height--80 top--10 left--5',
+        shape: '',
+        src: StickerProvider.coiwLogo2,
+      },
+    ],
+  },
+  {
     id: 'hojpUVsOswgdk16',
     code: 'ERC721_COIW',
     name: 'CoiW Panels',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -59,6 +95,10 @@ const twitterBanners: ITheme[] = [
     id: 'kGtqML4pcLMKpM4',
     code: 'ERC721_COIW',
     name: 'CoiW Planet Boi',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -107,6 +147,10 @@ const twitterBanners: ITheme[] = [
     id: 'hojpUVsOswDdk1E',
     code: 'ERC721_COIW',
     name: 'CoiW Banner 1',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -143,6 +187,10 @@ const twitterBanners: ITheme[] = [
     id: 'kGtqML4pcJMKpM4',
     code: 'ERC721_COIW',
     name: 'CoiW Banner 2',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -150,13 +198,13 @@ const twitterBanners: ITheme[] = [
     },
     nfts: [
       {
-        classNames: `hexagon-3 height--55 top--23 right--3 opacity--50`,
+        classNames: `hexagon-3 height--55 top--23 right--3`,
       },
       {
-        classNames: `hexagon-3 height--55 top--23 right--21 opacity--50`,
+        classNames: `hexagon-3 height--55 top--23 right--21`,
       },
       {
-        classNames: `hexagon-3 height--55 top--23 right--39 opacity--50`,
+        classNames: `hexagon-3 height--55 top--23 right--39`,
       },
     ],
     fgStickers: [
@@ -176,6 +224,10 @@ const twitterBanners: ITheme[] = [
     id: '2IlJcy5poIOGIxp',
     code: 'ERC721_COIW',
     name: 'CoiW Banner 3 - Green',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -209,6 +261,10 @@ const twitterBanners: ITheme[] = [
     id: 'KyD0MxWVQvyLhXB',
     code: 'ERC721_COIW',
     name: 'CoiW Banner 3 - Red',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -242,6 +298,10 @@ const twitterBanners: ITheme[] = [
     id: 'HleUvffxXscemhd',
     code: 'ERC721_COIW',
     name: 'CoiW Banner 3 - Black',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -271,12 +331,19 @@ const twitterBanners: ITheme[] = [
       },
     ],
   },
+];
+
+const facebookBanners: ITheme[] = [
   {
-    id: 'y95srZ9ZRctzbTU',
+    id: 'y95srZ9ZRctzbTd',
     code: 'ERC721_COIW',
-    name: 'CoiW Banner 4',
-    size: 'twitter_banner',
-    classNames: 'twitter-banner',
+    name: 'CoiW World 1',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
+    size: 'facebook_banner',
+    classNames: 'facebook-banner',
     backdrop: {
       classNames: `bg-coiw-banner-4 bg-size--cover`,
     },
@@ -288,7 +355,7 @@ const twitterBanners: ITheme[] = [
         classNames: `hexagon-3 height--50 top--45 left--60`,
       },
       {
-        classNames: `hexagon-3 height--50 top--45 left--76`,
+        classNames: `hexagon-3 height--50 top--45 left--77`,
       },
     ],
     fgStickers: [
@@ -299,13 +366,14 @@ const twitterBanners: ITheme[] = [
       },
     ],
   },
-];
-
-const facebookBanners: ITheme[] = [
   {
     id: 'hojpUVsOswgd816',
     code: 'ERC721_COIW',
     name: 'CoiW Panels',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'facebook_banner',
     classNames: 'facebook-banner',
     backdrop: {
@@ -358,6 +426,10 @@ const facebookBanners: ITheme[] = [
     id: 'kGtqML4pcLMKpL4',
     code: 'ERC721_COIW',
     name: 'CoiW Planet Boi',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'facebook_banner',
     classNames: 'facebook-banner',
     backdrop: {
@@ -406,6 +478,10 @@ const facebookBanners: ITheme[] = [
     id: 'hojpUVsOswDdk12',
     code: 'ERC721_COIW',
     name: 'CoiW Banner 1',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'facebook_banner',
     classNames: 'facebook-banner',
     backdrop: {
@@ -442,6 +518,10 @@ const facebookBanners: ITheme[] = [
     id: 'kGtqML4pcJMKpM1',
     code: 'ERC721_COIW',
     name: 'CoiW Banner 2',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'facebook_banner',
     classNames: 'facebook-banner',
     backdrop: {
@@ -449,13 +529,13 @@ const facebookBanners: ITheme[] = [
     },
     nfts: [
       {
-        classNames: `hexagon-3 height--55 top--23 right--3 opacity--50`,
+        classNames: `hexagon-3 height--55 top--23 right--3`,
       },
       {
-        classNames: `hexagon-3 height--55 top--23 right--21 opacity--50`,
+        classNames: `hexagon-3 height--55 top--23 right--21`,
       },
       {
-        classNames: `hexagon-3 height--55 top--23 right--39 opacity--50`,
+        classNames: `hexagon-3 height--55 top--23 right--39`,
       },
     ],
     fgStickers: [
@@ -475,6 +555,10 @@ const facebookBanners: ITheme[] = [
     id: '2IlJcy5poIOGIxs',
     code: 'ERC721_COIW',
     name: 'CoiW Banner 3 - Green',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'facebook_banner',
     classNames: 'facebook-banner',
     backdrop: {
@@ -508,6 +592,10 @@ const facebookBanners: ITheme[] = [
     id: 'KyD0MxWVQvyLhXx',
     code: 'ERC721_COIW',
     name: 'CoiW Banner 3 - Red',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'facebook_banner',
     classNames: 'facebook-banner',
     backdrop: {
@@ -541,6 +629,10 @@ const facebookBanners: ITheme[] = [
     id: 'HleUvffxXscemha',
     code: 'ERC721_COIW',
     name: 'CoiW Banner 3 - Black',
+    author: {
+      name: 'Adz ⚜️',
+      url: 'https://twitter.com/ShaolinKingFu',
+    },
     size: 'facebook_banner',
     classNames: 'facebook-banner',
     backdrop: {
@@ -570,34 +662,6 @@ const facebookBanners: ITheme[] = [
       },
     ],
   },
-  {
-    id: 'y95srZ9ZRctzbTd',
-    code: 'ERC721_COIW',
-    name: 'CoiW Banner 4',
-    size: 'facebook_banner',
-    classNames: 'facebook-banner',
-    backdrop: {
-      classNames: `bg-coiw-banner-4 bg-size--cover`,
-    },
-    nfts: [
-      {
-        classNames: `hexagon-3 height--50 top--5 left--68`,
-      },
-      {
-        classNames: `hexagon-3 height--50 top--45 left--60`,
-      },
-      {
-        classNames: `hexagon-3 height--50 top--45 left--77`,
-      },
-    ],
-    fgStickers: [
-      {
-        classNames: 'height--80 top--10 left--5',
-        shape: '',
-        src: StickerProvider.coiwLogo2,
-      },
-    ],
-  },
 ];
 
 const square: ITheme[] = [
@@ -605,6 +669,10 @@ const square: ITheme[] = [
     id: 'hojpUVsOswgdk1E',
     code: 'ERC721_COIW',
     name: 'CoiW Panels',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'square',
     classNames: 'square',
     backdrop: {

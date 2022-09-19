@@ -7,6 +7,10 @@ const pillarPosters: ITheme[] = [
     id: '8AG0GwlwfMhUG8o',
     code: 'GENERIC',
     name: 'Full Poster (5x8)',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'pillar',
     classNames: 'pillar',
     backdrop: {
@@ -143,6 +147,10 @@ const towerPosters: ITheme[] = [
     id: 'TsmShjgY2AeYBT4',
     code: 'GENERIC',
     name: 'Full Poster (3x6)',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'tower',
     classNames: 'tower',
     backdrop: {
@@ -213,6 +221,10 @@ const squarePosters: ITheme[] = [
     id: 'j5HjAlAQQQDtFBp',
     code: 'GENERIC',
     name: 'PFP Split (2)',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'square',
     classNames: `square`,
     backdrop: {
@@ -234,6 +246,10 @@ const squarePosters: ITheme[] = [
     id: '7fIukhaJ6cFJwAj',
     code: 'GENERIC',
     name: 'Bordered Poster Centerpiece (4x4)',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'square',
     classNames: 'square',
     backdrop: {

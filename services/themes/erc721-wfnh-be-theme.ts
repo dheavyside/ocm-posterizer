@@ -6,6 +6,10 @@ const twitterBanners: ITheme[] = [
     id: 'ML3zafHij7GX9D4',
     code: 'ERC721_WFNH-BE',
     name: 'WF Banner 1',
+    author: {
+      name: 'Tremor',
+      url: 'https://twitter.com/Bruno_Vilela_',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -30,6 +34,10 @@ const twitterBanners: ITheme[] = [
     id: 'hb4BcUOrBPCVWkV',
     code: 'ERC721_WFNH-BE',
     name: 'WF Banner 2',
+    author: {
+      name: 'Tremor',
+      url: 'https://twitter.com/Bruno_Vilela_',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -51,6 +59,10 @@ const twitterBanners: ITheme[] = [
     id: 'bgA9CpsL2s28hSE',
     code: 'ERC721_WFNH-BE',
     name: 'WF Banner 3',
+    author: {
+      name: 'Tremor',
+      url: 'https://twitter.com/Bruno_Vilela_',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -69,6 +81,10 @@ const twitterBanners: ITheme[] = [
     id: 'h0gBfttsLyxjbXD',
     code: 'ERC721_WFNH-BE',
     name: 'WF Banner 4',
+    author: {
+      name: 'Tremor',
+      url: 'https://twitter.com/Bruno_Vilela_',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -129,6 +145,10 @@ const twitterBanners: ITheme[] = [
     id: 'EpHIvIRkXIWjyM1',
     code: 'ERC721_WFNH-BE',
     name: 'WF Banner 5',
+    author: {
+      name: 'Tremor',
+      url: 'https://twitter.com/Bruno_Vilela_',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -154,6 +174,10 @@ const squarePosters: ITheme[] = [
     id: 'QIN9vaxrQg2C7zg',
     code: 'ERC721_WFNH-BE',
     name: 'WF Poster Shakey (2x2)',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'square',
     classNames: 'square',
     backdrop: {

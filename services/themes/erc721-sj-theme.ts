@@ -7,6 +7,10 @@ const blackMirrorBanners: ITheme[] = [
     id: 'MWmrtN8DDA0PXDZ',
     code: 'ERC721_SJ',
     name: 'SJ Twitter-B Mirror-3',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -38,6 +42,10 @@ const blackMirrorBanners: ITheme[] = [
     id: 'Qzu0VdrUDoNWgPv',
     code: 'ERC721_SJ',
     name: 'SJ Facebook-B Mirror-3',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'facebook_banner',
     classNames: 'facebook-banner',
     backdrop: {
@@ -69,6 +77,10 @@ const blackMirrorBanners: ITheme[] = [
     id: 'aHXZDEkLk6sAGzk',
     code: 'ERC721_SJ',
     name: 'SJ Opensea-B Mirror-3',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'opensea_banner',
     classNames: 'opensea-banner',
     backdrop: {
@@ -104,6 +116,10 @@ const gen4Banners: ITheme[] = [
     id: '7T6bWDNazvPfF3f',
     code: 'ERC721_SJ',
     name: 'SJ Twitter-B Gen-4',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -133,6 +149,10 @@ const gen4Banners: ITheme[] = [
     id: 'SL2AjyPOc5xfJrj',
     code: 'ERC721_SJ',
     name: 'SJ Facebook-B Gen-4',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'facebook_banner',
     classNames: 'facebook-banner',
     backdrop: {
@@ -165,6 +185,10 @@ const gen6Banners: ITheme[] = [
     id: 'Uv9XOg963ZByCEd',
     code: 'ERC721_SJ',
     name: 'SJ Opensea-B Gen-6',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'opensea_banner',
     classNames: 'opensea-banner',
     backdrop: {
@@ -205,6 +229,10 @@ const squarePosters: ITheme[] = [
     id: 'XGhW6xXB1QDhLWU',
     code: 'ERC721_SJ',
     name: 'SJ Poster NFTNYC (2x2)',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'square',
     classNames: `square`,
     backdrop: {
@@ -241,6 +269,10 @@ const squarePosters: ITheme[] = [
     id: 'WquFnu6pC9jDdmE',
     code: 'ERC721_SJ',
     name: 'SJ Poster Chikyuu Sentai (5)',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'square',
     classNames: `square`,
     backdrop: {
@@ -277,6 +309,10 @@ const pillarPosters: ITheme[] = [
     id: '7iOla2MlOpCl5wB',
     code: 'ERC721_SJ',
     name: 'SJ Holo Solo Card',
+    author: {
+      name: 'ZombieBoy 🥽',
+      url: 'https://twitter.com/zmbby69',
+    },
     size: 'pillar',
     classNames: `pillar`,
     backdrop: {

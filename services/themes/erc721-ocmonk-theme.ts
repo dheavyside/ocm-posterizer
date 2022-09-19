@@ -7,6 +7,10 @@ const twitterBanners: ITheme[] = [
     id: 'HNCOSKG6vEtVlWG',
     code: 'ERC721_OCMONK',
     name: 'OCM Karma',
+    author: {
+      name: 'H Ξ Λ V Υ • D',
+      url: 'https://twitter.com/dheavyside',
+    },
     size: 'twitter_banner',
     classNames: 'twitter-banner',
     backdrop: {
@@ -38,6 +42,10 @@ const facebookBanners: ITheme[] = [
     id: 'HNCOSKG6vEtVlWA',
     code: 'ERC721_OCMONK',
     name: 'OCM Karma',
+    author: {
+      name: 'H Ξ Λ V Υ • D',
+      url: 'https://twitter.com/dheavyside',
+    },
     size: 'facebook_banner',
     classNames: 'facebook-banner',
     backdrop: {
@@ -69,6 +77,10 @@ const wuxga: ITheme[] = [
     id: 'HNCOSKG6TEtVlWA',
     code: 'ERC721_OCMONK',
     name: 'OCM Karma',
+    author: {
+      name: 'H Ξ Λ V Υ • D',
+      url: 'https://twitter.com/dheavyside',
+    },
     size: 'wuxga',
     classNames: 'wuxga',
     backdrop: {

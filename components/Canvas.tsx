@@ -147,7 +147,16 @@ export default function Canvas({
                 ))}
           </div>
         </div>
-
+        <div
+          className={`phone:float-left text-tiny ${
+            theme?.author ? '' : 'hidden'
+          }`}
+        >
+          <span>Designed by </span>
+          <a href={theme?.author?.url} target='_blank' className='text-sm'>
+            <span>{theme?.author?.name}</span>
+          </a>
+        </div>
         <div className='phone:float-right space-x-2 > * + *'>
           <button
             className='text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md inline-flex items-center'

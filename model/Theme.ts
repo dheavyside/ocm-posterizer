@@ -1,6 +1,10 @@
 import { StaticImageData } from 'next/image';
 import { tokenCode } from './Nft';
 
+export interface IThemeAuthor {
+  name: string;
+  url: string;
+}
 export type ThemeSize =
   | 'twitter_banner'
   | 'facebook_banner'
@@ -14,6 +18,7 @@ export interface ITheme {
   id: string;
   code?: tokenCode;
   name: string;
+  author?: IThemeAuthor;
   classNames: string;
   size: ThemeSize;
   backdrop: IThemeImage;
