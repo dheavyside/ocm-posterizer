@@ -11,6 +11,7 @@ export default async function handler(req, res) {
   const file = Buffer.from(blob);
 
   res.setHeader('Content-Type', 'image/jpg');
+  res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
   res.send(file);
 }
 
