@@ -53,18 +53,18 @@ const facebookBanners: ITheme[] = [
     },
     nfts: [
       {
-        classNames: `height--61 top--14 right--53 rotate--1`,
+        classNames: `height--60 top--14 right--53 rotate--1`,
       },
       {
-        classNames: `height--61 top--10 right--29 rotate--357`,
+        classNames: `height--60 top--9 right--29 rotate--358`,
       },
       {
-        classNames: `height--61 top--18 right--4 rotate--3`,
+        classNames: `height--60 top--18 right--4 rotate--3`,
       },
     ],
     fgStickers: [
       {
-        classNames: 'height--99 top--2 right--1 click-through',
+        classNames: 'height--99 top--1 right--1 click-through',
         shape: '',
         src: StickerProvider.ocmWoodenFrame,
       },
