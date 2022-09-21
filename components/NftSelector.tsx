@@ -190,6 +190,7 @@ const NftSelector = (props: INftSelectorProps) => {
           >
             <option value='ALL'>All NFT</option>
             <option value='ERC721_OCMONK'>OCM Genesis</option>
+            <option value='ERC721_KARMA'>OCM Karma</option>
             <option value='ERC721_SJ'>SJ Genesis</option>
             <option value='ERC721_WFNH-BE'>WF Bronze Ed</option>
           </select>
