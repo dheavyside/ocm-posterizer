@@ -98,6 +98,31 @@ const wuxga: ITheme[] = [
       },
     ],
   },
+  {
+    id: 'O3IGRJ09JWISDF',
+    code: 'ERC721_OCMONK',
+    name: 'OCM Full-Set Friday',
+    author: {
+      name: '0xFelix (🍌,🍌) 🔮,🏴‍☠️🦜',
+      url: 'https://twitter.com/edframe',
+    },
+    size: 'wuxga',
+    classNames: 'wuxga',
+    backdrop: {
+      classNames: `${styles.wuxga_2} bg-ocmonk-wuxga-2 bg-size--cover`,
+    },
+    nfts: [
+      {
+        classNames: `${styles.first} circle top--27`,
+      },
+      {
+        classNames: `${styles.second} circle top--27`,
+      },
+      {
+        classNames: `${styles.third} circle top--27`,
+      },
+    ],
+  },
 ];
 
 export const ERC721_OCMONK_THEMES: ITheme[] = [
