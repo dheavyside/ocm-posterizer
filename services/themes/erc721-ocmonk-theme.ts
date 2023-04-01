@@ -35,6 +35,31 @@ const twitterBanners: ITheme[] = [
       },
     ],
   },
+  {
+    id: 'NG0WESV2DHFH04',
+    code: 'ERC721_OCMONK',
+    name: 'OCM Matching Set',
+    author: {
+      name: '0xFelix (🍌,🍌) 🔮,🏴‍☠️🦜',
+      url: 'https://twitter.com/edframe',
+    },
+    size: 'twitter_banner',
+    classNames: 'twitter-banner',
+    backdrop: {
+      classNames: `${styles.banner_2} bg-ocmonk-banner-2 bg-size--cover`,
+    },
+    nfts: [
+      {
+        classNames: `${styles.first} circle top--18`,
+      },
+      {
+        classNames: `${styles.second} circle top--18`,
+      },
+      {
+        classNames: `${styles.third} circle top--18`,
+      },
+    ],
+  },
 ];
 
 const facebookBanners: ITheme[] = [
@@ -67,6 +92,31 @@ const facebookBanners: ITheme[] = [
         classNames: 'height--99 top--1 right--1 click-through',
         shape: '',
         src: StickerProvider.ocmWoodenFrame,
+      },
+    ],
+  },
+  {
+    id: 'T34WJF92314FHHAVV',
+    code: 'ERC721_OCMONK',
+    name: 'OCM Matching Set',
+    author: {
+      name: '0xFelix (🍌,🍌) 🔮,🏴‍☠️🦜',
+      url: 'https://twitter.com/edframe',
+    },
+    size: 'facebook_banner',
+    classNames: 'facebook-banner',
+    backdrop: {
+      classNames: `${styles.banner_2} bg-ocmonk-banner-2 bg-size--cover`,
+    },
+    nfts: [
+      {
+        classNames: `${styles.first} circle top--18`,
+      },
+      {
+        classNames: `${styles.second} circle top--18`,
+      },
+      {
+        classNames: `${styles.third} circle top--18`,
       },
     ],
   },

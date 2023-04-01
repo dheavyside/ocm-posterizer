@@ -115,7 +115,7 @@ export default function Home({ collectionId, collection }: Props) {
     return (
       <>
         <Head>
-          <title>Posterizer - {collection.name}</title>
+          <title>{`Posterizer - ${collection.name}`}</title>
         </Head>
         <ErrorPage statusCode={404} />
       </>
@@ -125,7 +125,7 @@ export default function Home({ collectionId, collection }: Props) {
   return (
     <div className='text-center tablet:max-w-max tablet:w-[85%] tablet:mx-auto'>
       <Head>
-        <title>Posterizer - {collection.name}</title>
+        <title>{`Posterizer - ${collection.name}`}</title>
       </Head>
       <div className='py-4 tablet:mx-0 tablet:flex tablet:flex-cols tablet:justify-left'>
         <img

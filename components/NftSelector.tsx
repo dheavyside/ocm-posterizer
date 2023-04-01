@@ -221,7 +221,7 @@ const NftSelector = (props: INftSelectorProps) => {
                   key={`${nft.code}#${nft.id}`}
                 >
                   <Image
-                    src={nft.image_url}
+                    src={nft.image_url_os}
                     alt='Missing'
                     width={100}
                     height={100}

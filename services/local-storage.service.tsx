@@ -1,3 +1,5 @@
+import { JUNKIES_DATA } from '../data/junkies';
+import { WIZEFELLAS_DATA } from '../data/wfs';
 import { Nft, standard, tokenCode } from '../model/Nft';
 
 export class LocalStorageService {
@@ -117,6 +119,10 @@ export class LocalStorageService {
                   tokenSymbol as tokenCode,
                   tx.tokenID
                 ),
+                image_url_os: this.getImageUrlOs(
+                  tokenSymbol as tokenCode,
+                  tx.tokenID
+                ),
               });
               // Remove NFT
             } else {
@@ -133,6 +139,23 @@ export class LocalStorageService {
 
   private getImageUrl(code: tokenCode, id: string): string {
     return `/api/avatar?code=${code}&id=${id}`;
+  }
+
+  private getImageUrlOs(code: tokenCode, id: string): string {
+    switch (code) {
+      case 'ERC721_OCMONK':
+        return `https://d3q7x2s6555pey.cloudfront.net/png/${id}.png`;
+      case 'ERC721_SJ':
+        return `https://static.shinji.xyz/unit-00/nft-images/${
+          JUNKIES_DATA[parseInt(id)].hash
+        }.png`;
+      case 'ERC721_WFNH-BE':
+        return WIZEFELLAS_DATA[Number.parseInt(id) - 1];
+      case 'ERC721_KARMA':
+        return `https://karma-dessert.onchainmonkey.com/karma-images/${id}`;
+    }
+
+    return '';
   }
 
   private getAddressesFromStorage() {

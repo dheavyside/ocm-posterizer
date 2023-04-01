@@ -13,6 +13,7 @@ export interface Nft {
   standard: standard;
   id: string;
   image_url: string;
+  image_url_os?: string;
 }
 
 export interface NftDisplay extends Nft {
