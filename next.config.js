@@ -22,6 +22,7 @@ const nextConfig = {
         pathname: '**',
       }
     ],
+    unoptimized: true,
   },
   reactStrictMode: true,
   swcMinify: true,
@@ -32,6 +33,14 @@ const nextConfig = {
     outputFileTracingIncludes: {
       './pages/api/screenshot': ['./public/backdrops/**/*', './public/*.png'],
     },
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.(woff|woff2|eot|ttf|otf)$/i,
+      issuer: { and: [/\.[jt]sx?$/] },
+      type: 'asset/resource',
+    });
+    return config;
   },
 };
 
