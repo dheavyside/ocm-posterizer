@@ -1,7 +1,7 @@
 import { Nft } from '../model/Nft';
 import { ITheme, ThemeSize } from '../model/Theme';
 import html2canvas from 'html2canvas';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import AvatarImage from './AvatarImage';
@@ -32,6 +32,7 @@ export default function Canvas({
 }: Props) {
   const [downloading, setDownloading] = useState(false);
   const [customBackground, setCustomBackground] = useState<BackgroundStyle>({});
+  const captureRef = useRef<HTMLDivElement>(null);
 
   async function generateImage() {
     if (!theme) return Promise.reject('No theme selected');
@@ -118,6 +119,7 @@ export default function Canvas({
         <div className={`main-wrapper ${theme.classNames} `}>
           <div
             id='capture'
+            ref={captureRef}
             style={customBackground}
             className={`overflow-hidden inset-0 absolute ${
               theme.backdrop?.classNames ?? ''

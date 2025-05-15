@@ -12,6 +12,7 @@ import {
 } from '../../../services/data.service';
 import Head from 'next/head';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const message = [
   "!RISE",
@@ -49,13 +50,9 @@ export default function Home({ collectionId, collection }: Props) {
     setVisibleModal(false);
   };
 
-  const themeUpdated = (newTheme: ITheme | null) => {
-    if (newTheme) {
-      setGreeting(message[Math.floor(Math.random() * message.length)]);
-      setTheme(newTheme);
-    } else {
-      setTheme(null);
-    }
+  const themeUpdated = (newTheme: ITheme) => {
+    setGreeting(message[Math.floor(Math.random() * message.length)]);
+    setTheme(newTheme);
   };
 
   const onAvatarClick = (index: number) => {
@@ -132,8 +129,10 @@ export default function Home({ collectionId, collection }: Props) {
         <div className='flex items-center justify-between'>
           {/* Left: OCM Logo */}
           <div className='flex items-center'>
-            <img
+            <Image
               src="/logos/OCMLogo-W-H.png"
+              width={56}
+              height={56}
               className='w-auto h-14'
               alt="OCM Logo"
             />
@@ -160,7 +159,7 @@ export default function Home({ collectionId, collection }: Props) {
 
       <LayoutSelector
         colId={collectionId?.toString()}
-        themeUpdated={themeUpdated}
+        themeUpdated={(theme: ITheme | null) => themeUpdated(theme as ITheme)}
       />
 
       <Canvas

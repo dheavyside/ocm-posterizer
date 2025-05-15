@@ -1,4 +1,4 @@
-import { StaticImageData } from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 
 type Props = {
   index: number;
@@ -15,13 +15,25 @@ export default function StickerImage({
   shape = '',
   onStickerClick,
 }: Props) {
+  const classes = `nft ${classNames ?? ''} ${shape ?? ''}`;
+  
   return (
-    <img
-      data-index={index}
-      className={`nft ${classNames ?? ''} ${shape ?? ''}`}
-      src={src.src}
-      alt={src.src}
-      onClick={() => onStickerClick(index)}
-    />
+    <div className={classes} style={{ position: 'absolute' }}>
+      <Image
+        data-index={index}
+        src={src}
+        alt={`Sticker ${index}`}
+        onClick={() => onStickerClick?.(index)}
+        width={575}
+        height={575}
+        priority={true}
+        style={{ 
+          objectFit: 'contain',
+          width: '100%',
+          height: '100%',
+          position: 'relative'
+        }}
+      />
+    </div>
   );
 }
