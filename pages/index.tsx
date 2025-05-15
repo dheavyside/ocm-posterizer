@@ -24,7 +24,6 @@ export default function Home() {
                   className='rounded-lg aspect-square'
                   width={200}
                   height={200}
-                  priority
                 />
               </div>
             </a>
