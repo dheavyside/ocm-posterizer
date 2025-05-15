@@ -128,15 +128,14 @@ export default function Home({ collectionId, collection }: Props) {
         {/* Logo and share button row */}
         <div className='flex items-center justify-between'>
           {/* Left: OCM Logo */}
-          <div className='flex items-center'>
-            <Image
-              src="/logos/OCMLogo-W-H.png"
-              width={56}
-              height={56}
-              className='w-auto h-14'
-              alt="OCM Logo"
-            />
-          </div>
+          <Image
+            src="/logos/OCMLogo-W-H.png"
+            width={186}
+            height={56}
+            alt="OCM Logo"
+            priority
+            style={{ width: '186px', height: 'auto' }}
+          />
           
           {/* Right: Share button */}
           <div className='text-right'>

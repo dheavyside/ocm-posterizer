@@ -6,14 +6,6 @@ export default function Document(props: DocumentProps) {
     <Html lang='en'>
       <Head>
         <link rel='shortcut icon' href='/favicon.ico' />
-        <link
-          href='https://fonts.googleapis.com/css?family=Poppins:400,700&display=optional'
-          rel='stylesheet'
-        />
-        <link
-          href='https://fonts.googleapis.com/css?family=Khula:400,700&display=optional'
-          rel='stylesheet'
-        />
       </Head>
       <body>
         <Main />

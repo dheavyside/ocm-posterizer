@@ -377,7 +377,7 @@ export default function Canvas({
         </div>
         <div className='phone:float-right space-x-2 > * + *'>
           <button
-            className='text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md inline-flex items-center'
+            className='inline-flex items-center px-4 py-2 text-sm font-bold text-gray-800 bg-gray-300 rounded-md hover:bg-gray-400'
             onClick={() => setBackground({})}
           >
             <FontAwesomeIcon icon={faRefresh} className='mr-1' /> Default
@@ -385,7 +385,7 @@ export default function Canvas({
 
           <button
             disabled={downloading}
-            className='text-sm bg-sj-blue hover:bg-sj-yellow hover:text-sj-blue text-white font-bold py-2 px-4 rounded-md inline-flex items-center'
+            className='inline-flex items-center px-4 py-2 text-sm font-bold text-white rounded-md bg-sj-blue hover:bg-sj-yellow hover:text-sj-blue'
             onClick={() => setDownloading(true)}
           >
             <FontAwesomeIcon icon={faDownload} className='mr-1' /> Download
