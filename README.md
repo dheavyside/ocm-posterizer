@@ -1,25 +1,24 @@
-# Posterizer
+# OCM Posterizer
 
-This is a Shonen Junk community tool that enables crafting of posters with partner NFTs using curated templates designed by the team and community alike.
+This is an On Chain Monkey community tool that enables crafting of posters with NFTs using curated templates.
 
-## Getting Started
+## Features
 
-First, install dependencies:
+- Client-side image generation with dom-to-image
+- Custom CORS-friendly image proxy
+- Background customization
+- Multiple theme support
+
+## Development
 
 ```bash
 npm install
-```
-
-Then run the development server:
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Implementation Details
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+The application uses a hybrid approach for image generation:
+- Client-side rendering with dom-to-image
+- Server-side image proxy to handle CORS restrictions
+- Fallback mechanisms for compatibility
