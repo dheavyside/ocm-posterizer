@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { LocalStorageService } from '../services/local-storage.service';
 import styles from './history.module.scss';
 import Head from 'next/head';
+import Image from 'next/image';
 
 interface DownloadedFile {
   id: number;
@@ -65,7 +66,13 @@ export default function History() {
         ) : (
           downloads.map((download: DownloadedFile) => (
             <div className={styles.itemWrapper} key={download.id}>
-              <img src={download.src} alt={download.id.toString()} />
+              <Image 
+                src={download.src} 
+                alt={download.id.toString()} 
+                width={300}
+                height={300}
+                className={styles.downloadImage}
+              />
               <div className={styles.buttonWrapper}>
                 <button
                   className='button success'

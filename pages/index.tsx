@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { COLLECTIONS } from '../data/collections';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -17,11 +18,13 @@ export default function Home() {
               <div
                 className={`bg-[#34363a] overflow-hidden p-2 rounded-[1em] ease-in duration-100 hover:scale-110 hover:drop-shadow-2xl`}
               >
-                <img
+                <Image
                   src={col.logo}
                   alt={col.name}
                   className='rounded-lg aspect-square'
-                ></img>
+                  width={200}
+                  height={200}
+                />
               </div>
             </a>
           ))}

@@ -4,7 +4,7 @@
       "src": "package.json",
       "use": "@vercel/next",
       "config": {
-        "installCommand": "npm install --build-from-source=canvas"
+        "installCommand": "apt-get update && apt-get install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libpixman-1-dev && npm install --build-from-source=canvas"
       }
     }
   ],
@@ -12,4 +12,4 @@
     { "src": "/(.*)", "dest": "/" }
   ],
   "output": "standalone"
-} 
+}

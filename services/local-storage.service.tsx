@@ -144,7 +144,7 @@ export class LocalStorageService {
     switch (code) {
       case 'ONCHAINMONKEY':
         return `https://d3q7x2s6555pey.cloudfront.net/png/${id}.png`;
-      case 'ERC721_KATOSHI':
+      case 'KATOSHI_CLASSIC':
         return `https://karma-dessert.onchainmonkey.com/karma-images/${id}`;
     }
 
@@ -154,13 +154,18 @@ export class LocalStorageService {
   private getAddressesFromStorage() {
     let addressesMap = localStorage.getItem('addresses');
     try {
-      this.addresses = new Map(JSON.parse(addressesMap));
+      if (addressesMap) {
+        this.addresses = new Map(JSON.parse(addressesMap));
+      }
     } catch {}
   }
+  
   private getDownloadsFromStorage() {
     let downloadsMap = localStorage.getItem('downloads');
     try {
-      this.downloads = new Map(JSON.parse(downloadsMap));
+      if (downloadsMap) {
+        this.downloads = new Map(JSON.parse(downloadsMap));
+      }
     } catch {}
   }
 }

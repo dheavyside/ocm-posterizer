@@ -1,4 +1,5 @@
 import loadingAnimation from '../public/loading.svg';
+import Image from 'next/image';
 
 type Props = {
   show: boolean;
@@ -11,11 +12,13 @@ export default function Loading({ show }: Props) {
         show ? '' : 'hidden'
       }`}
     >
-      <img
+      <Image
         className='h-24'
         src={loadingAnimation.src}
         alt='Please wait...'
-      ></img>
+        width={96}
+        height={96}
+      />
       <h4>Please wait</h4>
     </div>
   );
