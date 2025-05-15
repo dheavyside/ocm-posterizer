@@ -1,4 +1,5 @@
-import ocmonkLogo from '../public/logos/ocmonk.svg';
+// Import SVG as a component
+import OcmonkLogo from '../public/logos/ocmonk.svg';
 
 export interface ICollection {
   id: string;
@@ -10,6 +11,6 @@ export const COLLECTIONS: ICollection[] = [
   {
     id: 'onchainmonkey',
     name: 'OnChain Monkey',
-    logo: ocmonkLogo.src,
+    logo: '/logos/ocmonk.svg', // Reference as a static path
   },
 ];
