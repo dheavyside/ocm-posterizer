@@ -2,27 +2,26 @@
 
 const nextConfig = {
   images: {
-    domains: [
-      'd3q7x2s6555pey.cloudfront.net',
-      'karma-dessert.onchainmonkey.com',
-    ],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'd3q7x2s6555pey.cloudfront.net',
         port: '',
-        pathname: '*',
+        pathname: '**',
       },
       {
         protocol: 'https',
-        hostname: 'karma-dessert.onchainmonkey.com',
+        hostname: 'creator-hub-prod.s3.us-east-2.amazonaws.com',
         port: '',
-        pathname: '*',
-      },
+        pathname: '**',
+      }
     ],
   },
   reactStrictMode: true,
   swcMinify: true,
+  poweredByHeader: false,
+  // Enable static exports if needed
+  // output: 'export',
 };
 
 module.exports = nextConfig;

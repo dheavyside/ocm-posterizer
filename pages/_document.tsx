@@ -1,7 +1,7 @@
-// pages/_document.js
 import { Html, Head, Main, NextScript } from 'next/document';
+import type { DocumentProps } from 'next/document';
 
-export default function Document() {
+export default function Document(props: DocumentProps) {
   return (
     <Html lang='en'>
       <Head>
@@ -9,11 +9,11 @@ export default function Document() {
         <link
           href='https://fonts.googleapis.com/css?family=Poppins:400,700&display=optional'
           rel='stylesheet'
-        ></link>
+        />
         <link
           href='https://fonts.googleapis.com/css?family=Khula:400,700&display=optional'
           rel='stylesheet'
-        ></link>
+        />
       </Head>
       <body>
         <Main />
@@ -21,4 +21,4 @@ export default function Document() {
       </body>
     </Html>
   );
-}
+} 

@@ -12,7 +12,7 @@ interface DownloadedFile {
 }
 
 export default function History() {
-  const [downloads, setDownloads] = useState([]);
+  const [downloads, setDownloads] = useState<DownloadedFile[]>([]);
   const initialized = useRef(false);
 
   // Retrieve all partner NFTs
@@ -32,7 +32,7 @@ export default function History() {
     }
   }, []);
 
-  function downloadUri(uri, name) {
+  function downloadUri(uri: string, name: string): void {
     var link = document.createElement('a');
     link.download = name;
     link.href = uri;
@@ -41,7 +41,7 @@ export default function History() {
     document.body.removeChild(link);
   }
 
-  function removeDownload(id) {
+  function removeDownload(id: number): void {
     let storageService = new LocalStorageService();
     storageService.RemoveDownload(id);
     let downloadsCopy = [...downloads];
@@ -60,7 +60,7 @@ export default function History() {
       <div className={styles.itemsWrapper}>
         {downloads.length === 0 ? (
           <p>
-            No history yet.<Link href='/'> Let&apos;s create one.</Link>
+            No history yet.<Link href='/' className="hover:underline"> Let&apos;s create one.</Link>
           </p>
         ) : (
           downloads.map((download: DownloadedFile) => (

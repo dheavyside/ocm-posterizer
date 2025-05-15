@@ -5,8 +5,8 @@ import styles from './erc721-ocmonk-theme.module.scss';
 const twitterBanners: ITheme[] = [
   {
     id: 'HNCOSKG6vEtVlWG',
-    code: 'ERC721_OCMONK',
-    name: 'OCM Karma',
+    code: 'ONCHAINMONKEY',
+    name: 'OCM Katoshi',
     author: {
       name: 'H Ξ Λ V Υ • D',
       url: 'https://twitter.com/dheavyside',
@@ -37,7 +37,7 @@ const twitterBanners: ITheme[] = [
   },
   {
     id: 'NG0WESV2DHFH04',
-    code: 'ERC721_OCMONK',
+    code: 'ONCHAINMONKEY',
     name: 'OCM Matching Set',
     author: {
       name: '0xFelix (🍌,🍌) 🔮,🏴‍☠️🦜',
@@ -65,8 +65,8 @@ const twitterBanners: ITheme[] = [
 const facebookBanners: ITheme[] = [
   {
     id: 'HNCOSKG6vEtVlWA',
-    code: 'ERC721_OCMONK',
-    name: 'OCM Karma',
+    code: 'ONCHAINMONKEY',
+    name: 'OCM Katoshi',
     author: {
       name: 'H Ξ Λ V Υ • D',
       url: 'https://twitter.com/dheavyside',
@@ -97,7 +97,7 @@ const facebookBanners: ITheme[] = [
   },
   {
     id: 'T34WJF92314FHHAVV',
-    code: 'ERC721_OCMONK',
+    code: 'ONCHAINMONKEY',
     name: 'OCM Matching Set',
     author: {
       name: '0xFelix (🍌,🍌) 🔮,🏴‍☠️🦜',
@@ -125,10 +125,10 @@ const facebookBanners: ITheme[] = [
 const wuxga: ITheme[] = [
   {
     id: 'HNCOSKG6TEtVlWA',
-    code: 'ERC721_OCMONK',
-    name: 'OCM Karma',
+    code: 'ONCHAINMONKEY',
+    name: 'Landscape',
     author: {
-      name: 'H Ξ Λ V Υ • D',
+      name: 'HEAVY D',
       url: 'https://twitter.com/dheavyside',
     },
     size: 'wuxga',
@@ -148,35 +148,10 @@ const wuxga: ITheme[] = [
       },
     ],
   },
-  {
-    id: 'O3IGRJ09JWISDF',
-    code: 'ERC721_OCMONK',
-    name: 'OCM Full-Set Friday',
-    author: {
-      name: '0xFelix (🍌,🍌) 🔮,🏴‍☠️🦜',
-      url: 'https://twitter.com/edframe',
-    },
-    size: 'wuxga',
-    classNames: 'wuxga',
-    backdrop: {
-      classNames: `${styles.wuxga_2} bg-ocmonk-wuxga-2 bg-size--cover`,
-    },
-    nfts: [
-      {
-        classNames: `${styles.first} circle top--27`,
-      },
-      {
-        classNames: `${styles.second} circle top--27`,
-      },
-      {
-        classNames: `${styles.third} circle top--27`,
-      },
-    ],
-  },
 ];
 
 export const ERC721_OCMONK_THEMES: ITheme[] = [
+  ...wuxga,
   ...twitterBanners,
   ...facebookBanners,
-  ...wuxga,
 ];

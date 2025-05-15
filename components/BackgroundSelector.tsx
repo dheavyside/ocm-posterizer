@@ -4,13 +4,21 @@ import { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
 
+type BackgroundStyle = {
+  backgroundColor?: string;
+  backgroundImage?: string;
+  backgroundSize?: string;
+  backgroundPositionX?: string;
+  backgroundPositionY?: string;
+};
+
 type Props = {
-  onChange?: ({}) => void;
+  onChange?: (style: BackgroundStyle) => void;
 };
 
 export default function BackgroundSelector({ onChange }: Props) {
   const [color, setColor] = useState('#');
-  const [bgStyle, setBgStyle] = useState({});
+  const [bgStyle, setBgStyle] = useState<BackgroundStyle>({});
   const [showColorSelector, setShowColorSelector] = useState(false);
   const initialized = useRef(false);
 
@@ -33,14 +41,16 @@ export default function BackgroundSelector({ onChange }: Props) {
 
   useEffect(() => {
     if (color !== '#') {
-      let style = {
+      let style: BackgroundStyle = {
         backgroundColor: color,
         backgroundImage: 'none',
       };
       setBgStyle(style);
-      onChange(style);
+      if (onChange) {
+        onChange(style);
+      }
     }
-  }, [color]);
+  }, [color, onChange]);
 
   function openFiles() {
     (document.getElementById('uploader') as HTMLInputElement).click();
@@ -48,22 +58,25 @@ export default function BackgroundSelector({ onChange }: Props) {
 
   function upload() {
     var file = (document.getElementById('uploader') as HTMLInputElement)
-      .files[0];
+      .files?.[0];
+    if (!file) return;
+
     var reader = new FileReader();
     reader.onloadend = function () {
-      let style = {
-        backgroundImage: `url('${reader.result}')`,
-        backgroundSize: 'cover',
-        backgroundPositionX: 'center',
-        backgroundPositionY: 'bottom',
-      };
-      setBgStyle(style);
-      onChange(style);
+      if (typeof reader.result === 'string') {
+        let style: BackgroundStyle = {
+          backgroundImage: `url('${reader.result}')`,
+          backgroundSize: 'cover',
+          backgroundPositionX: 'center',
+          backgroundPositionY: 'bottom',
+        };
+        setBgStyle(style);
+        if (onChange) {
+          onChange(style);
+        }
+      }
     };
-    if (file) {
-      reader.readAsDataURL(file);
-    } else {
-    }
+    reader.readAsDataURL(file);
   }
 
   return (
@@ -72,7 +85,7 @@ export default function BackgroundSelector({ onChange }: Props) {
         type='file'
         id='uploader'
         className='hidden'
-        onChange={() => upload()}
+        onChange={upload}
       />
 
       <div
@@ -102,7 +115,7 @@ export default function BackgroundSelector({ onChange }: Props) {
           </div>
           <div>
             <button
-              onClick={() => openFiles()}
+              onClick={openFiles}
               className='text-tiny bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-sm inline-flex items-center'
             >
               <FontAwesomeIcon icon={faImage} className='mr-2' />

@@ -1,240 +1,196 @@
-import styles from './NftSelector.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faXmark,
-  faWallet,
-  faAddressBook,
-  faTrash,
-  faUserCircle,
-} from '@fortawesome/free-solid-svg-icons';
-import { Nft, standard } from '../model/Nft';
-import _ from 'lodash';
-import { useEffect, useRef, useState } from 'react';
-import { LocalStorageService } from '../services/local-storage.service';
-import { isAddress } from '../services/eth-util.service';
-import Image from 'next/image';
+import { faXmark, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Nft, tokenCode } from '../model/Nft';
+import { useState } from 'react';
 
 export interface INftSelectorProps {
-  nfts: Nft[];
-  inUseNfts: Nft[];
   visible: boolean;
-  onAvatarSelected?: (avatar: Nft) => void;
+  onAvatarSelected?: (avatar: Nft, slot: number) => void;
+  onFullSetSelected?: (nfts: Nft[], baseSlot: number) => void;
   onCloseClick?: () => void;
-  updatedAddresses?: () => void;
+  isFullSetFriday?: boolean;
+  selectedSlot?: number;
 }
 
 const NftSelector = (props: INftSelectorProps) => {
-  const [wallets, setWallets] = useState([]);
-  const [filteredNfts, setFilteredNfts] = useState([]);
+  const [tokenInput, setTokenInput] = useState('');
+  const [selectedCollection, setSelectedCollection] = useState<tokenCode>('ONCHAINMONKEY');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const [showWallet, setShowWallet] = useState(
-    props.nfts.length === 0 ? true : false
-  );
-  const [filter, setFilter] = useState({
-    code: 'ALL',
-    id: '',
-  });
-  const initialized = useRef(false);
-  const storageService = useRef<LocalStorageService>(null);
-
-  useEffect(() => {
-    setFilteredNfts(
-      props.nfts.filter(
-        (nft) =>
-          (filter.code === 'ALL' && filter.id === '') ||
-          (filter.code === nft.code && filter.id === '') ||
-          (nft.id.startsWith(filter.id) &&
-            (filter.code === 'ALL' || filter.code === nft.code))
-      )
-    );
-  }, [filter, props.nfts]);
-
-  // Retrieve all partner NFTs
-  useEffect(() => {
-    async function getWallets() {
-      storageService.current = new LocalStorageService();
-      let arrayWallets = Array.from(storageService.current.GetAddresses());
-      setWallets(arrayWallets);
-      setShowWallet(arrayWallets.length === 0 ? true : false);
+  function getImageUrl(code: tokenCode, id: string): string {
+    switch (code) {
+      case 'ONCHAINMONKEY':
+        return `https://d3q7x2s6555pey.cloudfront.net/png/${id}.png`;
+      case 'KATOSHI_CLASSIC':
+        // Pad the ID to 4 digits for Katoshi Classic
+        const paddedClassicId = id.padStart(4, '0');
+        return `https://ocm-karma-png.s3.us-east-2.amazonaws.com/1${paddedClassicId}.png`;
+      case 'KATOSHI_PRIME':
+        // Pad the ID to 4 digits for Katoshi Prime
+        const paddedPrimeId = id.padStart(4, '0');
+        return `https://ocm-karma-png.s3.us-east-2.amazonaws.com/2${paddedPrimeId}.png`;
     }
-
-    if (!initialized.current) {
-      getWallets();
-      initialized.current = true;
-    }
-  }, []);
-
-  function search() {
-    const collectionId = document.getElementById(
-      'collectionId'
-    ) as HTMLSelectElement;
-    const keyword = document.getElementById('keyword') as HTMLInputElement;
-    setFilter({ code: collectionId.value, id: keyword.value });
+    return '';
   }
 
-  function shorten(address: string): string {
-    return (
-      address.substring(0, 6) +
-      '...' +
-      address.substring(address.length - 4, address.length)
-    );
-  }
-
-  async function addAddressFromClipboard() {
-    const newAddress = await navigator.clipboard.readText();
-    if (isAddress(newAddress.toLowerCase())) {
-      storageService.current.AddAddress(newAddress);
-      setWallets(Array.from(storageService.current.GetAddresses()));
-      props.updatedAddresses();
-      setShowWallet(false);
+  function createNftFromToken() {
+    if (!tokenInput) return;
+    
+    // Strip leading zeros and get the first positive integer
+    const cleanedInput = tokenInput.replace(/^0+/, '');
+    // If the input was only zeros, use "1" as the minimum valid value
+    const finalInput = cleanedInput || '1';
+    
+    // Validate Genesis NFT ID range (1-9999)
+    const tokenNumber = parseInt(finalInput);
+    if (isNaN(tokenNumber) || tokenNumber < 1 || tokenNumber > 9999) {
+      setErrorMessage('Genesis NFT ID must be between 1 and 9999');
+      return;
     }
-  }
+    
+    // Clear error message if valid
+    setErrorMessage('');
+    
+    if (props.isFullSetFriday) {
+      // For Full Set Friday theme, automatically create all three NFTs
+      const nfts: Nft[] = [
+        {
+          code: 'ONCHAINMONKEY',
+          standard: 'ERC721',
+          id: finalInput,
+          image_url: getImageUrl('ONCHAINMONKEY', finalInput),
+          image_url_os: getImageUrl('ONCHAINMONKEY', finalInput)
+        },
+        {
+          code: 'KATOSHI_CLASSIC',
+          standard: 'ERC721',
+          id: `1${finalInput.padStart(4, '0')}`,
+          image_url: getImageUrl('KATOSHI_CLASSIC', finalInput),
+          image_url_os: getImageUrl('KATOSHI_CLASSIC', finalInput)
+        },
+        {
+          code: 'KATOSHI_PRIME',
+          standard: 'ERC721',
+          id: `2${finalInput.padStart(4, '0')}`,
+          image_url: getImageUrl('KATOSHI_PRIME', finalInput),
+          image_url_os: getImageUrl('KATOSHI_PRIME', finalInput)
+        }
+      ];
 
-  function addAddress() {
-    const newAddress = (document.getElementById('address') as HTMLInputElement)
-      .value;
-    if (isAddress(newAddress.toLowerCase())) {
-      storageService.current.AddAddress(newAddress);
-      setWallets(Array.from(storageService.current.GetAddresses()));
-      props.updatedAddresses();
-      setShowWallet(false);
-      (document.getElementById('address') as HTMLInputElement).value = '';
+      // Auto-populate all three slots
+      if (typeof props.selectedSlot === 'number') {
+        const baseSlot = Math.floor(props.selectedSlot / 3) * 3;
+        
+        // Use the new full set handler if available, otherwise fall back to individual updates
+        if (props.onFullSetSelected) {
+          props.onFullSetSelected(nfts, baseSlot);
+        } else if (props.onAvatarSelected) {
+          // Fallback to individual updates if onFullSetSelected is not provided
+          props.onAvatarSelected(nfts[0], baseSlot);
+          props.onAvatarSelected(nfts[1], baseSlot + 1);
+          props.onAvatarSelected(nfts[2], baseSlot + 2);
+        }
+        
+        // Close the dialog after all slots are populated
+        if (props.onCloseClick) {
+          setTimeout(() => {
+            props.onCloseClick?.();
+          }, 100);
+        }
+      }
+    } else {
+      // For other themes, create single NFT as before
+      const nft: Nft = {
+        code: selectedCollection,
+        standard: 'ERC721',
+        id: selectedCollection === 'ONCHAINMONKEY' 
+          ? finalInput 
+          : `${selectedCollection === 'KATOSHI_CLASSIC' ? '1' : '2'}${finalInput.padStart(4, '0')}`,
+        image_url: getImageUrl(selectedCollection, finalInput),
+        image_url_os: getImageUrl(selectedCollection, finalInput)
+      };
+
+      if (props.onAvatarSelected) {
+        props.onAvatarSelected(nft, props.selectedSlot || 0);
+      }
+      
+      // Close immediately for single NFT mode
+      if (props.onCloseClick) {
+        props.onCloseClick();
+      }
     }
+    
+    setTokenInput('');
   }
 
-  function removeAddress(type: standard, address: string) {
-    if (isAddress(address.toLowerCase())) {
-      storageService.current.RemoveAddress(type, address);
-      setWallets(Array.from(storageService.current.GetAddresses()));
-      props.updatedAddresses();
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      createNftFromToken();
     }
-  }
-
-  function onNftSelected(nft: Nft) {
-    props.onAvatarSelected(nft);
-
-    (document.getElementById('keyword') as HTMLInputElement).value = '';
-    if (initialized.current) {
-      search();
-    }
-  }
+  };
 
   return (
     <div
-      className={`fixed inset-0 text-white bg-black z-20 max-w-max mx-auto ${
-        props.visible ? '' : 'hidden'
+      className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-200 ${
+        props.visible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
-      <div className='flex justify-between'>
-        <button
-          className={`border-0 bg-transparent text-stone-400 align-left text-2xl mx-4 mt-4`}
-          onClick={() => {
-            props.onCloseClick();
-          }}
-        >
-          <FontAwesomeIcon icon={faXmark} />
-        </button>
-        <button
-          className={`border-0 bg-transparent text-white hover:text-sj-yellow align-left text-2xl mx-4 mt-4`}
-          onClick={() => setShowWallet(!showWallet)}
-        >
-          <FontAwesomeIcon icon={showWallet ? faUserCircle : faWallet} />
-        </button>
-      </div>
-      <div
-        className={`mx-4 mt-6 tiny:w-[360px] tiny:mx-auto ${
-          showWallet ? '' : 'hidden'
-        }`}
-      >
-        <h2 className='my-5'>Wallets</h2>
-        <div>
-          {wallets.map(([key, value]) => (
-            <div
-              key={key}
-              className='text-sm flex flex-row items-center justify-between mt-4'
-            >
-              <span className='align-middle'>{shorten(key)}</span>
-              <span className='ml-4'>{value}</span>
-              <button
-                className='bg-rose-600 px-2 py-1 rounded-sm my-auto'
-                onClick={() => removeAddress(value, key)}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
-          ))}
-          <div className='text-sm flex flex-row items-center justify-between mt-4'>
-            <input
-              className='py-2 px-4 grow text-white bg-[#3b3b3b]'
-              type='text'
-              id='address'
-              placeholder='Wallet address...'
-            ></input>
-            <button
-              className='bg-green-500 px-4 py-1 rounded-sm my-auto flex-none ml-3'
-              onClick={() => addAddress()}
-            >
-              <FontAwesomeIcon icon={faAddressBook} className='mr-1' />
-              <em>Add</em>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className={`${showWallet ? 'hidden' : ''}`}>
-        <div className='mt-8 mx-8 flex flex-col phone:flex-row justify-left tablet:justify-center'>
-          <select
-            className='px-4 py-2 mb-4 phone:mb-0 phone:mr-4 text-white bg-[#3b3b3b]'
-            name='nfts'
-            id='collectionId'
-            onChange={search}
+      <div className={`bg-[#1a1a1a] rounded-lg shadow-xl transform transition-transform duration-200 w-[24rem] max-w-[95vw] ${
+        props.visible ? 'scale-100' : 'scale-95'
+      }`}>
+        <div className='flex items-center justify-between p-4 border-b border-gray-700'>
+          <h2 className='text-lg font-semibold text-white'>
+            {props.isFullSetFriday ? 'Select Full Set' : 'Select NFT'}
+          </h2>
+          <button
+            className='transition-colors text-stone-400 hover:text-white'
+            onClick={props.onCloseClick}
           >
-            <option value='ALL'>All NFT</option>
-            <option value='ERC721_OCMONK'>OCM Genesis</option>
-            <option value='ERC721_KARMA'>OCM Karma</option>
-            <option value='ERC721_SJ'>SJ Genesis</option>
-            <option value='ERC721_WFNH-BE'>WF Bronze Ed</option>
-          </select>
-          <input
-            className='px-4 py-2 text-white bg-[#3b3b3b]'
-            id='keyword'
-            type='text'
-            onChange={search}
-            placeholder='Search by Token ID'
-          />
+            <FontAwesomeIcon icon={faXmark} className='text-xl' />
+          </button>
         </div>
-        <div className={`overflow-y-auto h-[85vh] py-12`}>
-          {props.nfts.length === 0 || filteredNfts.length === 0 ? (
-            <div className='mb-4'>No NFTs Found</div>
-          ) : (
-            <div className='mb-4'>{filteredNfts.length} NFTs Found</div>
-          )}
-
-          {props.nfts.length === 0 ? (
-            <div>No supported NFTs found.</div>
-          ) : (
-            <div
-              className={`grid grid-cols-3 tiny:grid-cols-4 phone:grid-cols-5 tablet:grid-cols-6 desktop:grid-cols-8 gap-4 mx-6`}
-            >
-              {filteredNfts.map((nft) => (
-                <div
-                  className='hover:cursor-pointer hover:scale-110 ease-in-out duration-300'
-                  key={`${nft.code}#${nft.id}`}
+        <div className='p-6'>
+          <div className='flex flex-col gap-4'>
+            {!props.isFullSetFriday && (
+              <select
+                className='px-3 py-2 text-base text-white bg-[#3b3b3b] rounded-md border border-gray-600 focus:outline-none focus:border-green-500'
+                name='nfts'
+                id='collectionId'
+                onChange={(e) => setSelectedCollection(e.target.value as tokenCode)}
+                value={selectedCollection}
+              >
+                <option value='ONCHAINMONKEY'>OCM Genesis</option>
+                <option value='KATOSHI_CLASSIC'>Katoshi Classic</option>
+                <option value='KATOSHI_PRIME'>Katoshi Prime</option>
+              </select>
+            )}
+            <div className='flex flex-col gap-2'>
+              <label className='text-sm text-white'>Enter OCM Genesis ID number (1-9999)</label>
+              <div className='flex items-center gap-2'>
+                <span className='text-2xl font-medium text-white'>#</span>
+                <input
+                  className='flex-1 px-4 py-3 text-lg text-white bg-[#3b3b3b] rounded-md border border-gray-600 focus:outline-none focus:border-green-500'
+                  type='text'
+                  value={tokenInput}
+                  onChange={(e) => {
+                    setTokenInput(e.target.value);
+                    setErrorMessage('');
+                  }}
+                  onKeyPress={handleKeyPress}
+                  placeholder='1-9999'
+                />
+                <button
+                  className='px-4 py-3 text-white transition-colors bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50'
+                  onClick={createNftFromToken}
                 >
-                  <Image
-                    src={nft.image_url_os}
-                    alt='Missing'
-                    width={100}
-                    height={100}
-                    layout='responsive'
-                    onClick={() => onNftSelected(nft)}
-                    loading='lazy'
-                    className='rounded-lg'
-                  />
-                  <span className='text-sm'>{nft.id}</span>
-                </div>
-              ))}
+                  <FontAwesomeIcon icon={faPlus} className='text-xl' />
+                </button>
+              </div>
+              {errorMessage && (
+                <p className='mt-1 text-sm text-red-500'>{errorMessage}</p>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

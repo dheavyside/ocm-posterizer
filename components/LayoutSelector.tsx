@@ -4,84 +4,73 @@ import { themes } from '../services/ThemeProvider';
 
 export interface Props {
   colId?: string;
-  themeUpdated?: (theme: ITheme) => void;
+  themeUpdated?: (theme: ITheme | null) => void;
 }
 
-const sizes = [
-  {
-    size: 'twitter_banner',
-    label: 'Twitter',
-  },
-  {
-    size: 'facebook_banner',
-    label: 'Facebook',
-  },
-  {
-    size: 'opensea_banner',
-    label: 'Opensea',
-  },
+interface Size {
+  size: string;
+  label: string;
+}
+
+const sizes: Size[] = [
   {
     size: 'wuxga',
-    label: 'WUXGA',
-  },
-  {
-    size: 'square',
-    label: 'Square (1:1)',
-  },
-  {
-    size: 'tower',
-    label: 'Phone',
-  },
-  {
-    size: 'pillar',
-    label: 'Poster',
+    label: 'Full Set Friday',
   },
 ];
 
-const LayoutSelector = ({ colId, themeUpdated }: Props) => {
-  const [filteredSizes, setFilteredSizes] = useState([]);
-  const [filteredThemes, setFilteredThemes] = useState([]);
+const LayoutSelector = ({ colId = '', themeUpdated }: Props) => {
+  const [filteredSizes, setFilteredSizes] = useState<Size[]>([]);
+  const [filteredThemes, setFilteredThemes] = useState<ITheme[]>([]);
   const [filter, setFilter] = useState({
     size: '',
     themeId: '',
   });
 
+  // Helper function to filter themes by code
+  const filterThemesByCode = (themes: ITheme[], code: string) => {
+    return themes.filter(
+      (theme) =>
+        theme.code?.toLowerCase().trim() === code.toLowerCase().trim() ||
+        theme.code?.toLowerCase().trim() === 'generic'
+    );
+  };
+
   useEffect(() => {
-    if (colId) {
-      const themeFilteredByCode = themes.filter(
-        (theme) =>
-          theme.code.toLowerCase().trim() === colId.toLowerCase().trim() ||
-          theme.code.toLowerCase().trim() === 'generic'
-      );
-      const fs = sizes.filter(
-        (s) => themeFilteredByCode.filter((f) => f.size === s.size).length > 0
-      );
-      setFilteredSizes(fs);
-      if (filter.size === '' && fs.length > 0) {
-        setFilter({ size: fs[0].size, themeId: filter.themeId });
-        return;
-      }
+    // Skip if colId is empty
+    if (!colId) return;
+    
+    // Get themes filtered by collection ID
+    const themeFilteredByCode = filterThemesByCode(themes, colId);
+    
+    // Get available sizes for this collection
+    const fs = sizes.filter(
+      (s) => themeFilteredByCode.filter((f) => f.size === s.size).length > 0
+    );
+    setFilteredSizes(fs);
+    
+    // If no size is selected and sizes are available, select the first size
+    if (filter.size === '' && fs.length > 0) {
+      setFilter({ size: fs[0].size, themeId: filter.themeId });
+      return;
+    }
 
-      const themeFilteredBySize = themes.filter(
-        (theme) =>
-          theme.size === filter.size &&
-          (theme.code.toLowerCase().trim() === colId.toLowerCase().trim() ||
-            theme.code.toLowerCase().trim() === 'generic')
-      );
+    // Get themes filtered by both collection ID and size
+    const themeFilteredBySize = themeFilteredByCode.filter(
+      (theme) => theme.size === filter.size
+    );
 
-      setFilteredThemes(themeFilteredBySize);
-      if (!filter.themeId && themeFilteredBySize.length > 0) {
-        themeSelect(themeFilteredBySize[0].id);
-      }
+    setFilteredThemes(themeFilteredBySize);
+    
+    // If no theme is selected and themes are available, select the first theme
+    if (!filter.themeId && themeFilteredBySize.length > 0) {
+      themeSelect(themeFilteredBySize[0].id);
     }
   }, [filter, colId]);
 
-  function sizeSelect(value) {
-    const filtered = themes.filter(
-      (theme) =>
-        theme.size === value &&
-        (theme.code.toLowerCase().trim() === colId.toLowerCase().trim() ||
-          theme.code.toLowerCase().trim() === 'generic')
+  function sizeSelect(value: string): void {
+    const filtered = filterThemesByCode(themes, colId || '').filter(
+      (theme) => theme.size === value
     );
 
     setFilter({
@@ -89,163 +78,65 @@ const LayoutSelector = ({ colId, themeUpdated }: Props) => {
       themeId: filtered.length > 0 ? filtered[0].id : '',
     });
 
-    if (filtered.length > 0 && themeUpdated) {
-      themeUpdated(filtered[0]);
-    } else {
-      themeUpdated(null);
+    if (themeUpdated) {
+      if (filtered.length > 0) {
+        themeUpdated(filtered[0]);
+      } else {
+        themeUpdated(null);
+      }
     }
   }
 
-  function themeSelect(value) {
+  function themeSelect(value: string): void {
     setFilter({ size: filter.size, themeId: value });
-    themeUpdated(themes.find((theme) => theme.id === value));
+    const selectedTheme = themes.find((theme) => theme.id === value);
+    if (themeUpdated && selectedTheme) {
+      themeUpdated(selectedTheme);
+    }
   }
 
   return (
-    <div className='max-w-max mx-auto'>
-      <div className='w-full text-tiny md:text-sm'>
-        <div className=''>
-          <ul className='flex flex-wrap justify-center tablet:justify-start -mb-px font-medium text-center text-white'>
+    <div className='w-full p-2 rounded-lg bg-[#16181d]'>
+      <div className='text-tiny md:text-sm'>
+        <div className='text-left'>
+          <ul className='flex flex-wrap justify-start -mb-px font-medium text-left text-white'>
             {filteredSizes &&
               filteredSizes.map((item) => (
                 <li key={item.size}>
-                  <a
+                  <button
                     onClick={() => sizeSelect(item.size)}
-                    className={`inline-flex p-4 rounded-t-lg border-b-2 text-white hover:border-b-sj-yellow hover:text-sj-yellow cursor-pointer ${
+                    aria-label={`Select ${item.label} layout`}
+                    aria-pressed={filter.size === item.size}
+                    className={`inline-flex p-2 rounded-lg text-white hover:text-sj-neon cursor-pointer ${
                       filter.size === item.size
-                        ? 'border-b-sj-yellow text-sj-yellow'
+                        ? 'font-bold'
                         : ''
                     }`}
                   >
                     {item.label}
-                  </a>
+                  </button>
                 </li>
               ))}
-            {/* <li className=''>
-              <a
-                onClick={() => sizeSelect('twitter_banner')}
-                className={`inline-flex p-4 rounded-t-lg border-b-2 text-white hover:border-b-sj-yellow hover:text-sj-yellow cursor-pointer ${
-                  filter.size === 'twitter_banner'
-                    ? 'border-b-sj-yellow text-sj-yellow'
-                    : ''
-                }`}
-              >
-                Twitter
-              </a>
-            </li>
-            <li className=''>
-              <a
-                onClick={() => sizeSelect('facebook_banner')}
-                className={`inline-flex p-4 rounded-t-lg border-b-2 text-white hover:border-b-sj-yellow hover:text-sj-yellow cursor-pointer ${
-                  filter.size === 'facebook_banner'
-                    ? 'border-b-sj-yellow text-sj-yellow'
-                    : ''
-                }`}
-              >
-                Facebook
-              </a>
-            </li>
-            <li className=''>
-              <a
-                onClick={() => sizeSelect('opensea_banner')}
-                className={`inline-flex p-4 rounded-t-lg border-b-2 text-white hover:border-b-sj-yellow hover:text-sj-yellow cursor-pointer ${
-                  filter.size === 'opensea_banner'
-                    ? 'border-b-sj-yellow text-sj-yellow'
-                    : ''
-                }`}
-              >
-                Opensea
-              </a>
-            </li>
-            <li className=''>
-              <a
-                onClick={() => sizeSelect('square')}
-                className={`inline-flex p-4 rounded-t-lg border-b-2 text-white hover:border-b-sj-yellow hover:text-sj-yellow cursor-pointer ${
-                  filter.size === 'square'
-                    ? 'border-b-sj-yellow text-sj-yellow'
-                    : ''
-                }`}
-              >
-                {' '}
-                Square (1:1)
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={() => sizeSelect('tower')}
-                className={`inline-flex p-4 rounded-t-lg border-b-2 text-white hover:border-b-sj-yellow hover:text-sj-yellow cursor-pointer ${
-                  filter.size === 'tower'
-                    ? 'border-b-sj-yellow text-sj-yellow'
-                    : ''
-                }`}
-              >
-                Phone
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={() => sizeSelect('pillar')}
-                className={`inline-flex p-4 rounded-t-lg border-b-2 text-white hover:border-b-sj-yellow hover:text-sj-yellow cursor-pointer ${
-                  filter.size === 'pillar'
-                    ? 'border-b-sj-yellow text-sj-yellow'
-                    : ''
-                }`}
-              >
-                Poster
-              </a>
-            </li> */}
-            {/* <li>
-              <a
-                onClick={() => sizeSelect('twitter_banner')}
-                className={`inline-flex p-4 rounded-t-lg border-b-2 text-white hover:border-b-sj-yellow hover:text-sj-yellow cursor-pointer ${
-                  filter.size === 'twitter_banner'
-                    ? 'border-b-sj-yellow text-sj-yellow'
-                    : ''
-                }`}
-              >
-                Poster (2:3)
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={() => sizeSelect('twitter_banner')}
-                className={`inline-flex p-4 rounded-t-lg border-b-2 text-white hover:border-b-sj-yellow hover:text-sj-yellow cursor-pointer ${
-                  filter.size === 'twitter_banner'
-                    ? 'border-b-sj-yellow text-sj-yellow'
-                    : ''
-                }`}
-              >
-                Landscape (4:3)
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={() => sizeSelect('twitter_banner')}
-                className={`inline-flex p-4 rounded-t-lg border-b-2 text-white hover:border-b-sj-yellow hover:text-sj-yellow cursor-pointer ${
-                  filter.size === 'twitter_banner'
-                    ? 'border-b-sj-yellow text-sj-yellow'
-                    : ''
-                }`}
-              >
-                Desktop (16:9)
-              </a>
-            </li> */}
           </ul>
         </div>
 
-        <div className='relative mt-2 text-center tablet:text-left'>
+        <div className="w-full h-px my-2 bg-gray-700 opacity-30"></div>
+
+        <div className='relative mt-2 text-left'>
           {filteredThemes.map((theme) => (
-            <span
-              className={`inline-block px-2 py-1 mt-2 rounded-sm mr-2 hover:bg-sj-blue hover:text-white cursor-pointer ${
+            <button
+              className={`inline-block px-2 py-1 mt-2 rounded-sm mr-2 hover:bg-sj-neon hover:text-black cursor-pointer ${
                 filter.themeId === theme.id
-                  ? 'bg-sj-blue text-white'
+                  ? 'bg-slate-600 text-white'
                   : 'bg-white text-black'
               }`}
               key={theme.id}
+              aria-label={`Select ${theme.name} theme`}
+              aria-pressed={filter.themeId === theme.id}
               onClick={() => themeSelect(theme.id)}
             >
               {theme.name}
-            </span>
+            </button>
           ))}
         </div>
       </div>

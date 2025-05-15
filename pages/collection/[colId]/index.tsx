@@ -10,17 +10,17 @@ import {
   getNftPlaceholders,
   updateNftPlaceholders,
 } from '../../../services/data.service';
-import { LocalStorageService } from '../../../services/local-storage.service';
 import Head from 'next/head';
+import Link from 'next/link';
 
 const message = [
-  "Let's create!",
-  'Have fun!',
-  "What's cooking?",
-  "You're awesome!",
-  'Weeb power!',
-  'Believe it!',
-  'Believe in magic!',
+  "!RISE",
+  'The monkeys will not be stopped!',
+  "Danny is cooking...",
+  "Who is Monkey King?",
+  'I love WAXL!',
+  'Magic Monks 4 Eva',
+  'Hi, Andy!',
 ];
 
 type Props = {
@@ -30,38 +30,15 @@ type Props = {
 
 export default function Home({ collectionId, collection }: Props) {
   const [greeting, setGreeting] = useState('');
-  const [theme, setTheme] = useState(null);
-  const [nfts, setNfts] = useState([] as Nft[]);
+  const [theme, setTheme] = useState<ITheme | null>(null);
   const [visibleModal, setVisibleModal] = useState(false);
   const [data, setData] = useState(getNftPlaceholders(50));
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const initialized = useRef(false);
-  const storageService = useRef<LocalStorageService>(null);
-
-  // Retrieve all partner NFTs
-  useEffect(() => {
-    async function getAllNFTs() {
-      storageService.current = new LocalStorageService();
-      let promises = [];
-      storageService.current
-        .GetAddresses()
-        .forEach(async (standard, address) => {
-          promises.push(storageService.current.findNFTs(address, standard));
-        });
-      Promise.all(promises).then(() => {
-        let newArray = [...storageService.current.getMyNFTs()];
-        setNfts(newArray);
-      });
-    }
-
-    if (!initialized.current) {
-      getAllNFTs();
-      initialized.current = true;
-    }
-  }, []);
 
   useEffect(() => {
-    setData(updateNftPlaceholders([...data], theme));
+    if (theme) {
+      setData(prevData => updateNftPlaceholders([...prevData], theme));
+    }
   }, [theme]);
 
   const showNftSelector = () => {
@@ -72,19 +49,18 @@ export default function Home({ collectionId, collection }: Props) {
     setVisibleModal(false);
   };
 
-  const themeUpdated = (theme: ITheme) => {
-    setGreeting(message[Math.floor(Math.random() * message.length)]);
-    setTheme(theme);
+  const themeUpdated = (newTheme: ITheme | null) => {
+    if (newTheme) {
+      setGreeting(message[Math.floor(Math.random() * message.length)]);
+      setTheme(newTheme);
+    } else {
+      setTheme(null);
+    }
   };
 
   const onAvatarClick = (index: number) => {
     setSelectedIndex(index);
-    //let dataCopy = [...data];
     showNftSelector();
-    //if (dataCopy[index].id.startsWith('-')) {
-    //showNftSelector();
-    //return;
-    //}
   };
 
   const onAvatarSelected = (avatar: Nft) => {
@@ -94,28 +70,50 @@ export default function Home({ collectionId, collection }: Props) {
     setData(dataCopy);
   };
 
+  const onFullSetSelected = (nfts: Nft[], baseSlot: number) => {
+    hideNftSelector();
+    setData(prevData => {
+      const dataCopy = [...prevData];
+      nfts.forEach((nft, index) => {
+        dataCopy[baseSlot + index] = nft;
+      });
+      return dataCopy;
+    });
+  };
+
   const onDownload = (src: string) => {
-    storageService.current.SaveDownload(src);
+    if (!theme) return;
+    
+    // Create a temporary link element
+    const link = document.createElement('a');
+    link.href = src;
+    link.download = `${theme.name}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
-  const updatedAddresses = async () => {
-    storageService.current = new LocalStorageService();
-    let promises = [];
-    storageService.current.GetAddresses().forEach(async (standard, address) => {
-      promises.push(storageService.current.findNFTs(address, standard));
-    });
-
-    Promise.all(promises).then(() => {
-      let newArray = [...storageService.current.getMyNFTs()];
-      setNfts(newArray);
-    });
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `${collection.name} Posterizer`,
+        url: window.location.href,
+      })
+      .catch((error) => console.log('Error sharing', error));
+    } else {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => alert('Link copied to clipboard!'))
+        .catch((error) => console.log('Error copying to clipboard', error));
+    }
   };
+
+  const isFullSetFriday = theme?.size === 'wuxga';
 
   if (!collection) {
     return (
       <>
         <Head>
-          <title>{`Posterizer - ${collection.name}`}</title>
+          <title>Posterizer - Not Found</title>
         </Head>
         <ErrorPage statusCode={404} />
       </>
@@ -127,16 +125,38 @@ export default function Home({ collectionId, collection }: Props) {
       <Head>
         <title>{`Posterizer - ${collection.name}`}</title>
       </Head>
-      <div className='py-4 tablet:mx-0 tablet:flex tablet:flex-cols tablet:justify-left'>
-        <img
-          src={collection.logo}
-          className='h-16 w-16 tablet:h-24 tablet:w-24 mx-auto tablet:mx-4'
-        />
-        <div className='mx-4 tablet:mx-0 tablet:text-left'>
-          <h2 className='text-4xl mt-4'>{collection.name}</h2>
-          <h1 className='text-md mt-2 text-slate-500'>{greeting}</h1>
+      
+      {/* Updated header with new layout */}
+      <div className='flex flex-col py-4'>
+        {/* Logo and share button row */}
+        <div className='flex items-center justify-between'>
+          {/* Left: OCM Logo */}
+          <div className='flex items-center'>
+            <img
+              src="/logos/OCMLogo-W-H.png"
+              className='w-auto h-14'
+              alt="OCM Logo"
+            />
+          </div>
+          
+          {/* Right: Share button */}
+          <div className='text-right'>
+            <button 
+              onClick={handleShare}
+              className='inline-flex items-center px-4 py-2 text-sm font-bold text-white rounded-md bg-slate-600 hover:bg-sj-neon hover:text-black'
+            >
+              Share
+            </button>
+          </div>
+        </div>
+        
+        {/* Message box below logo, full width and left aligned */}
+        <div className='mt-2 text-center tablet:text-left'>
+          <span className='text-sm text-slate-500'>{greeting}</span>
         </div>
       </div>
+      
+      {/* LayoutSelector component with full width styling is now used instead of this spacer */}
 
       <LayoutSelector
         colId={collectionId?.toString()}
@@ -151,19 +171,19 @@ export default function Home({ collectionId, collection }: Props) {
       />
 
       <NftSelector
-        nfts={nfts}
-        inUseNfts={[]}
         visible={visibleModal}
         onAvatarSelected={onAvatarSelected}
+        onFullSetSelected={onFullSetSelected}
         onCloseClick={hideNftSelector}
-        updatedAddresses={updatedAddresses}
+        isFullSetFriday={isFullSetFriday}
+        selectedSlot={selectedIndex}
       />
     </div>
   );
 }
 
-export async function getServerSideProps(context) {
-  const collectionId = context.query['colId'];
+export async function getServerSideProps(context: { query: { colId: string } }) {
+  const collectionId = context.query.colId;
   const collection = COLLECTIONS.filter(
     (col) => col.id === collectionId.toString()
   );

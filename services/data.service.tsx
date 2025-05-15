@@ -22,10 +22,8 @@ export const getNftPlaceholders = (number) => {
 export const updateNftPlaceholders = (nfts: Nft[], theme: ITheme) => {
   const placeholders: Map<tokenCode, string> = new Map<tokenCode, string>([
     ['GENERIC', generic_ph.src],
-    ['ERC721_SJ', erc721_sj_ph.src],
-    ['ERC721_COIW', erc721_sj_ph.src],
-    ['ERC721_OCMONK', generic_ph.src],
-    ['ERC721_WFNH-BE', erc721_wfnh_be_ph.src],
+    ['ONCHAINMONKEY', generic_ph.src],
+    ['ERC721_KATOSHI', generic_ph.src],
   ]);
 
   for (let i = 0; i < nfts.length; i++) {

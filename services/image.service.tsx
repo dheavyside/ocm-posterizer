@@ -1,8 +1,5 @@
 import sjChad from '../public/stickers/sj-chad.png';
 import sjCyborg from '../public/stickers/sj-cyborg.png';
-import sjNftNyc2022Poap from '../public/stickers/sj_nftnyc_2022_poap.png';
-import sjNftLa2022Poap from '../public/stickers/sj_nftla_2022_poap.png';
-import sjLogoBlue from '../public/stickers/sj_logo_blue.png';
 
 import coiwLogo from '../public/logos/coiw.svg';
 import coiwLogo2 from '../public/logos/coiw-2.svg';
@@ -19,9 +16,6 @@ import ocmWoodenFrame from '../public/stickers/ocmonk-wooden-frame.png';
 export class StickerProvider {
   static sjChad = sjChad;
   static sjCyborg = sjCyborg;
-  static sjNftNyc2022Poap = sjNftNyc2022Poap;
-  static sjNftLa2022Poap = sjNftLa2022Poap;
-  static sjLogoBlue = sjLogoBlue;
 
   static coiwLogo = coiwLogo;
   static coiwLogo2 = coiwLogo2;

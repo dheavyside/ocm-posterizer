@@ -28,7 +28,7 @@ export default function AvatarImage({
       className={classes}
       src={data[index].image_url}
       alt={data[index].image_url}
-      onClick={() => onAvatarClick(index)}
+      onClick={() => onAvatarClick?.(index)}
     />
   );
 }

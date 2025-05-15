@@ -1,18 +1,25 @@
 import { Nft } from '../model/Nft';
 import { ITheme, ThemeSize } from '../model/Theme';
-import domtoimage from 'dom-to-image';
+import html2canvas from 'html2canvas';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import AvatarImage from './AvatarImage';
-import BackgroundSelector from './BackgroundSelector';
 import StickerImage from './StickerImage';
 import Loading from './Loading';
 import Parser from 'html-react-parser';
 
+type BackgroundStyle = {
+  backgroundColor?: string;
+  backgroundImage?: string;
+  backgroundSize?: string;
+  backgroundPositionX?: string;
+  backgroundPositionY?: string;
+};
+
 type Props = {
   data: Nft[];
-  theme: ITheme;
+  theme: ITheme | null;
   onAvatarClick?: (index: number) => void;
   onDownload?: (src: string) => void;
 };
@@ -24,50 +31,62 @@ export default function Canvas({
   onDownload,
 }: Props) {
   const [downloading, setDownloading] = useState(false);
+  const [customBackground, setCustomBackground] = useState<BackgroundStyle>({});
 
-  const [customBackground, setCustomBackground] = useState({});
+  async function generateImage() {
+    if (!theme) return Promise.reject('No theme selected');
 
-  useEffect(() => {
-    if (downloading) {
-      generateImage().then(() => {
-        generateImage().then(() => {
-          generateImage().then((doc: string) => {
-            downloadURI(doc, `${theme.name}.png`);
-            onDownload(doc);
-            setDownloading(false);
-          });
-        });
+    try {
+      // Filter out placeholder NFTs (those with IDs starting with '-')
+      const validNfts = data.filter(nft => !nft.id.startsWith('-'));
+      console.log("Sending valid NFTs for screenshot:", validNfts.map(nft => nft.id));
+
+      const response = await fetch('/api/screenshot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          theme: theme.id,
+          nfts: validNfts.map(nft => nft.id).join(',')
+        }),
       });
+
+      if (!response.ok) {
+        throw new Error(`Screenshot failed: ${response.statusText}`);
+      }
+
+      const blob = await response.blob();
+      return URL.createObjectURL(blob);
+    } catch (error) {
+      console.error('Error generating image:', error);
+      throw error;
     }
-  }, [downloading]);
-
-  function generateImage() {
-    const printWidth = new Map<ThemeSize, number>([
-      ['twitter_banner', 1450],
-      ['facebook_banner', 1450],
-      ['opensea_banner', 1450],
-      ['wuxga', 1920],
-      ['square', 950],
-      ['pillar', 950],
-      ['tower', 950],
-    ]);
-
-    return new Promise((resolve) => {
-      domtoimage
-        .toPng(document.querySelector('#capture'), {
-          width: printWidth.get(theme.size),
-        })
-        .then(function (dataUrl) {
-          return resolve(dataUrl);
-        })
-        .catch(function (error) {
-          console.error('oops, something went wrong!', error);
-          setDownloading(false);
-        });
-    });
   }
 
-  function downloadURI(uri, name) {
+  useEffect(() => {
+    if (downloading && theme) {
+      generateImage()
+        .then((dataUrl) => {
+          if (dataUrl) {
+            if (onDownload) {
+              // Let the parent handle the download
+              onDownload(dataUrl);
+            } else {
+              // Only if parent doesn't have an onDownload handler
+              downloadURI(dataUrl, `${theme.name}.png`);
+            }
+          }
+          setDownloading(false);
+        })
+        .catch((error) => {
+          console.error('Error generating image:', error);
+          setDownloading(false);
+        });
+    }
+  }, [downloading, theme, onDownload]);
+
+  function downloadURI(uri: string, name: string) {
     var link = document.createElement('a');
     link.download = name;
     link.href = uri;
@@ -76,47 +95,54 @@ export default function Canvas({
     document.body.removeChild(link);
   }
 
-  function setBackground(style: any) {
+  function setBackground(style: BackgroundStyle = {}) {
     setCustomBackground(style);
+  }
+
+  if (!theme) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Please select a theme to get started
+      </div>
+    );
   }
 
   return (
     <>
       <Loading show={downloading} />
       <div
-        className={`container ${theme?.size + '_on_print'} ${
+        className={`container ${theme.size + '_on_print'} ${
           downloading ? 'printing' : ''
         }`}
       >
-        <div>
-          <BackgroundSelector onChange={setBackground} />
-        </div>
-        <div className={`main-wrapper ${theme?.classNames} `}>
+        <div className={`main-wrapper ${theme.classNames} `}>
           <div
             id='capture'
             style={customBackground}
             className={`overflow-hidden inset-0 absolute ${
-              theme?.backdrop?.classNames ?? ''
+              theme.backdrop?.classNames ?? ''
             }`}
           >
-            {!theme || !theme.bgStickers || theme.bgStickers.length === 0
+            {!theme.bgStickers || theme.bgStickers.length === 0
               ? ''
               : theme.bgStickers.map((item, index) => (
-                  <StickerImage
-                    key={index}
-                    src={item.src}
-                    index={index}
-                    classNames={item.classNames}
-                    shape={item.shape}
-                    onStickerClick={() => {}}
-                  />
+                  item.src && (
+                    <StickerImage
+                      key={index}
+                      src={item.src}
+                      index={index}
+                      classNames={item.classNames}
+                      shape={item.shape}
+                      onStickerClick={() => {}}
+                    />
+                  )
                 ))}
-            {!theme || !theme.bgHtml || theme.bgHtml.length === 0
+            {!theme.bgHtml || theme.bgHtml.length === 0
               ? ''
               : theme.bgHtml.map((item, index) => (
                   <div key={index}>{Parser(item)}</div>
                 ))}
-            {!theme || theme.nfts.length === 0
+            {theme.nfts.length === 0
               ? ''
               : theme.nfts.map((item, index) => (
                   <AvatarImage
@@ -128,19 +154,21 @@ export default function Canvas({
                     onAvatarClick={onAvatarClick}
                   />
                 ))}
-            {!theme || !theme.fgStickers || theme.fgStickers.length === 0
+            {!theme.fgStickers || theme.fgStickers.length === 0
               ? ''
               : theme.fgStickers.map((item, index) => (
-                  <StickerImage
-                    key={index}
-                    src={item.src}
-                    index={index}
-                    classNames={item.classNames + ' stamp'}
-                    shape={item.shape}
-                    onStickerClick={() => {}}
-                  />
+                  item.src && (
+                    <StickerImage
+                      key={index}
+                      src={item.src}
+                      index={index}
+                      classNames={item.classNames + ' stamp'}
+                      shape={item.shape}
+                      onStickerClick={() => {}}
+                    />
+                  )
                 ))}
-            {!theme || !theme.fgHtml || theme.fgHtml.length === 0
+            {!theme.fgHtml || theme.fgHtml.length === 0
               ? ''
               : theme.fgHtml.map((item, index) => (
                   <div key={index}>{Parser(item)}</div>
@@ -149,33 +177,26 @@ export default function Canvas({
         </div>
         <div
           className={`phone:float-left text-tiny ${
-            theme?.author ? '' : 'hidden'
+            theme.author ? '' : 'hidden'
           }`}
         >
           <span>Designed by </span>
           <a
-            href={theme?.author?.url}
+            href={theme.author?.url}
             target='_blank'
             rel='noreferrer'
             className='text-sm'
           >
-            <span>{theme?.author?.name}</span>
+            <span>{theme.author?.name}</span>
           </a>
         </div>
         <div className='phone:float-right space-x-2 > * + *'>
           <button
-            className='text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md inline-flex items-center'
-            onClick={() => setBackground({})}
-          >
-            <FontAwesomeIcon icon={faRefresh} className='mr-1' /> Default
-          </button>
-
-          <button
-            disabled={downloading ? true : false}
-            className='text-sm bg-sj-blue hover:bg-sj-yellow hover:text-sj-blue text-white font-bold py-2 px-4 rounded-md inline-flex items-center'
+            disabled={downloading}
+            className='inline-flex items-center px-6 py-3 text-base font-bold text-gray-800 rounded-md bg-sj-neon hover:bg-sj-yellow hover:text-white'
             onClick={() => setDownloading(true)}
           >
-            <FontAwesomeIcon icon={faDownload} className='mr-1' /> Download
+            <FontAwesomeIcon icon={faDownload} className='mr-2' /> Download
           </button>
         </div>
       </div>

@@ -94,10 +94,9 @@ export class LocalStorageService {
   private async getErc721NFTs(address: string) {
     address = address.toLowerCase();
     let erc721WhiteList: string[] = [
-      'ERC721_SJ',
-      'ERC721_OCMONK',
-      'ERC721_KARMA',
-      'ERC721_WFNH-BE',
+      'ONCHAINMONKEY',
+      'KATOSHI_CLASSIC',
+      'KATOSHI_PRIME'
     ];
 
     await fetch(
@@ -107,7 +106,7 @@ export class LocalStorageService {
 
       if (response.status === '1') {
         response.result.forEach((tx: any) => {
-          let tokenSymbol = `ERC721_${tx.tokenSymbol}`;
+          let tokenSymbol = `${tx.tokenSymbol}`;
           if (erc721WhiteList.includes(tokenSymbol)) {
             // Add NFT
             if (tx.to.toLowerCase() === address) {
@@ -143,15 +142,9 @@ export class LocalStorageService {
 
   private getImageUrlOs(code: tokenCode, id: string): string {
     switch (code) {
-      case 'ERC721_OCMONK':
+      case 'ONCHAINMONKEY':
         return `https://d3q7x2s6555pey.cloudfront.net/png/${id}.png`;
-      case 'ERC721_SJ':
-        return `https://static.shinji.xyz/unit-00/nft-images/${
-          JUNKIES_DATA[parseInt(id)].hash
-        }.png`;
-      case 'ERC721_WFNH-BE':
-        return WIZEFELLAS_DATA[Number.parseInt(id) - 1];
-      case 'ERC721_KARMA':
+      case 'ERC721_KATOSHI':
         return `https://karma-dessert.onchainmonkey.com/karma-images/${id}`;
     }
 
