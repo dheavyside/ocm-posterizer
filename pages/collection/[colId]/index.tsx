@@ -27,9 +27,13 @@ const message = [
 type Props = {
   collectionId: string;
   collection: ICollection;
+  navProps?: {
+    showShare?: boolean;
+    collectionName?: string;
+  };
 };
 
-export default function Home({ collectionId, collection }: Props) {
+export default function Home({ collectionId, collection, navProps }: Props) {
   const [greeting, setGreeting] = useState('');
   const [theme, setTheme] = useState<ITheme | null>(null);
   const [visibleModal, setVisibleModal] = useState(false);
@@ -118,65 +122,41 @@ export default function Home({ collectionId, collection }: Props) {
   }
 
   return (
-    <div className='text-center tablet:max-w-max tablet:w-[85%] tablet:mx-auto'>
+    <>
       <Head>
         <title>{`Posterizer - ${collection.name}`}</title>
       </Head>
       
-      {/* Updated header with new layout */}
-      <div className='flex flex-col py-4'>
-        {/* Logo and share button row */}
-        <div className='flex items-center justify-between'>
-          {/* Left: OCM Logo */}
-          <Image
-            src="/logos/OCMLogo-W-H.png"
-            width={186}
-            height={56}
-            alt="OCM Logo"
-            priority
-            style={{ width: '186px', height: 'auto' }}
-          />
-          
-          {/* Right: Share button */}
-          <div className='text-right'>
-            <button 
-              onClick={handleShare}
-              className='inline-flex items-center px-4 py-2 text-sm font-bold text-white rounded-md bg-slate-600 hover:bg-sj-neon hover:text-black'
-            >
-              Share
-            </button>
+      <div className='text-center tablet:max-w-max tablet:w-[85%] tablet:mx-auto'>
+        {/* Message box */}
+        {greeting && (
+          <div className='mb-3 text-center'>
+            <span className='text-xs text-slate-500'>{greeting}</span>
           </div>
-        </div>
+        )}
+
+        <LayoutSelector
+          colId={collectionId?.toString()}
+          themeUpdated={(theme: ITheme | null) => themeUpdated(theme as ITheme)}
+        />
         
-        {/* Message box below logo, full width and left aligned */}
-        <div className='mt-2 text-center tablet:text-left'>
-          <span className='text-sm text-slate-500'>{greeting}</span>
-        </div>
+        <Canvas
+          data={data}
+          onAvatarClick={onAvatarClick}
+          onDownload={onDownload}
+          theme={theme}
+        />
+
+        <NftSelector
+          visible={visibleModal}
+          onAvatarSelected={onAvatarSelected}
+          onFullSetSelected={onFullSetSelected}
+          onCloseClick={hideNftSelector}
+          isFullSetFriday={isFullSetFriday}
+          selectedSlot={selectedIndex}
+        />
       </div>
-      
-      {/* LayoutSelector component with full width styling is now used instead of this spacer */}
-
-      <LayoutSelector
-        colId={collectionId?.toString()}
-        themeUpdated={(theme: ITheme | null) => themeUpdated(theme as ITheme)}
-      />
-
-      <Canvas
-        data={data}
-        onAvatarClick={onAvatarClick}
-        onDownload={onDownload}
-        theme={theme}
-      />
-
-      <NftSelector
-        visible={visibleModal}
-        onAvatarSelected={onAvatarSelected}
-        onFullSetSelected={onFullSetSelected}
-        onCloseClick={hideNftSelector}
-        isFullSetFriday={isFullSetFriday}
-        selectedSlot={selectedIndex}
-      />
-    </div>
+    </>
   );
 }
 
@@ -190,6 +170,10 @@ export async function getServerSideProps(context: { query: { colId: string } }) 
     props: {
       collectionId,
       collection: collection.length > 0 ? collection[0] : null,
+      navProps: collection.length > 0 ? {
+        showShare: true,
+        collectionName: collection[0].name
+      } : undefined
     },
   };
 }

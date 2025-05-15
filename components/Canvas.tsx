@@ -1,11 +1,9 @@
 import { Nft } from '../model/Nft';
 import { ITheme, ThemeSize } from '../model/Theme';
 import domtoimage from 'dom-to-image';
-import { useEffect, useState, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload, faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { Download } from 'lucide-react';
 import AvatarImage from './AvatarImage';
-import BackgroundSelector from './BackgroundSelector';
 import StickerImage from './StickerImage';
 import Loading from './Loading';
 import Parser from 'html-react-parser';
@@ -103,16 +101,15 @@ export default function Canvas({
   onDownload,
 }: Props) {
   const [downloading, setDownloading] = useState(false);
-  const [customBackground, setCustomBackground] = useState<BackgroundStyle>({});
   const captureRef = useRef<HTMLDivElement>(null);
 
   // Function to proxy an image URL
-  function getProxiedImageUrl(originalUrl: string): string {
+  const getProxiedImageUrl = useCallback((originalUrl: string): string => {
     return `/api/imageProxy?url=${encodeURIComponent(originalUrl)}`;
-  }
+  }, []);
   
   // Preprocess images to use the proxy
-  function preprocessImages() {
+  const preprocessImages = useCallback(() => {
     // Find all img elements in the capture area
     const imgElements = document.querySelectorAll('#capture img') as NodeListOf<HTMLImageElement>;
     
@@ -134,62 +131,17 @@ export default function Canvas({
     });
     
     return originalSources;
-  }
+  }, [getProxiedImageUrl]);
   
   // Restore original image sources
-  function restoreImages(originals: {element: HTMLImageElement, src: string}[]) {
+  const restoreImages = useCallback((originals: {element: HTMLImageElement, src: string}[]) => {
     originals.forEach(({element, src}) => {
       element.src = src;
     });
-  }
-
-  useEffect(() => {
-    if (downloading && theme) {
-      // First try dom-to-image with triple call pattern
-      // Apply proxy to images first
-      const originalSources = preprocessImages();
-      
-      generateClientSideImage()
-        .then(dataUrl => {
-          // Restore original image sources
-          restoreImages(originalSources);
-          handleSuccessfulDownload(dataUrl);
-        })
-        .catch(error => {
-          console.error('Client-side image generation failed, falling back to server:', error);
-          
-          // Restore original image sources
-          restoreImages(originalSources);
-          
-          // Fall back to server-side API
-          generateServerSideImage()
-            .then(dataUrl => {
-              handleSuccessfulDownload(dataUrl);
-            })
-            .catch(serverError => {
-              console.error('Server-side image generation also failed:', serverError);
-              setDownloading(false);
-            });
-        });
-    }
-  }, [downloading, theme, onDownload, data]);
-
-  // Client-side generation using dom-to-image
-  async function generateClientSideImage(): Promise<string> {
-    if (!theme) return Promise.reject('No theme selected');
-    
-    // Triple attempt pattern from original code
-    try {
-      await domToImagePromise(); // First attempt to prime caches
-      await domToImagePromise(); // Second attempt
-      return await domToImagePromise(); // Final attempt - return the result
-    } catch (error) {
-      throw error;
-    }
-  }
+  }, []);
 
   // Individual dom-to-image promise
-  function domToImagePromise(): Promise<string> {
+  const domToImagePromise = useCallback((): Promise<string> => {
     if (!theme) return Promise.reject('No theme selected');
     
     const printWidth = new Map<ThemeSize, number>([
@@ -221,42 +173,24 @@ export default function Canvas({
           reject(error);
         });
     });
-  }
+  }, [theme]);
 
-  // Server-side generation fallback
-  async function generateServerSideImage(): Promise<string> {
-    if (!theme) return Promise.reject('No theme selected');
-    
+  // Client-side image generation
+  const generateClientSideImage = useCallback(async (): Promise<string> => {
     try {
-      // Filter out placeholder NFTs (those with IDs starting with '-')
-      const validNfts = data.filter(nft => !nft.id.startsWith('-'));
-      console.log("Sending valid NFTs for screenshot:", validNfts.map(nft => nft.id));
-
-      const response = await fetch('/api/screenshot', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          theme: theme.id,
-          nfts: validNfts.map(nft => nft.id).join(',')
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Screenshot failed: ${response.statusText}`);
-      }
-
-      const blob = await response.blob();
-      return URL.createObjectURL(blob);
+      const originalSources = await preprocessImages();
+      const dataUrl = await domToImagePromise(); // First attempt
+      await restoreImages(originalSources);
+      return dataUrl;
     } catch (error) {
-      console.error('Error generating image on server:', error);
-      throw error;
+      console.error('First attempt failed:', error);
+      await domToImagePromise(); // Second attempt
+      return await domToImagePromise(); // Final attempt - return the result
     }
-  }
+  }, [domToImagePromise, preprocessImages, restoreImages]);
 
-  // Handle successful download from either method
-  function handleSuccessfulDownload(dataUrl: string) {
+  // Handle successful download
+  const handleSuccessfulDownload = useCallback((dataUrl: string) => {
     if (onDownload) {
       // Let the parent handle the download
       onDownload(dataUrl);
@@ -265,7 +199,19 @@ export default function Canvas({
       downloadURI(dataUrl, `${theme!.name}.png`);
     }
     setDownloading(false);
-  }
+  }, [onDownload, theme]);
+
+  // Handle download click
+  useEffect(() => {
+    if (!downloading) return;
+
+    generateClientSideImage()
+      .then(handleSuccessfulDownload)
+      .catch((error) => {
+        console.error('Error generating image:', error);
+        setDownloading(false);
+      });
+  }, [downloading, generateClientSideImage, handleSuccessfulDownload]);
 
   function downloadURI(uri: string, name: string) {
     var link = document.createElement('a');
@@ -274,10 +220,6 @@ export default function Canvas({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
-
-  function setBackground(style: BackgroundStyle = {}) {
-    setCustomBackground(style);
   }
 
   if (!theme) {
@@ -296,14 +238,10 @@ export default function Canvas({
           downloading ? 'printing' : ''
         }`}
       >
-        <div>
-          <BackgroundSelector onChange={setBackground} />
-        </div>
         <div className={`main-wrapper ${theme.classNames} `}>
           <div
             id='capture'
             ref={captureRef}
-            style={customBackground}
             className={`overflow-hidden inset-0 absolute ${
               theme.backdrop?.classNames ?? ''
             }`}
@@ -361,7 +299,7 @@ export default function Canvas({
           </div>
         </div>
         <div
-          className={`phone:float-left text-tiny ${
+          className={`phone:float-left text-tiny mb-4 phone:mb-0 ${
             theme.author ? '' : 'hidden'
           }`}
         >
@@ -375,20 +313,13 @@ export default function Canvas({
             <span>{theme.author?.name}</span>
           </a>
         </div>
-        <div className='phone:float-right space-x-2 > * + *'>
-          <button
-            className='inline-flex items-center px-4 py-2 text-sm font-bold text-gray-800 bg-gray-300 rounded-md hover:bg-gray-400'
-            onClick={() => setBackground({})}
-          >
-            <FontAwesomeIcon icon={faRefresh} className='mr-1' /> Default
-          </button>
-
+        <div className='phone:float-right'>
           <button
             disabled={downloading}
-            className='inline-flex items-center px-4 py-2 text-sm font-bold text-white rounded-md bg-sj-blue hover:bg-sj-yellow hover:text-sj-blue'
+            className='inline-flex items-center px-6 py-3 text-sm font-bold text-black transition-colors duration-200 rounded-lg shadow-lg bg-sj-neon hover:bg-sj-yellow hover:text-sj-blue'
             onClick={() => setDownloading(true)}
           >
-            <FontAwesomeIcon icon={faDownload} className='mr-1' /> Download
+            <Download className='w-5 h-5 mr-2' /> Download
           </button>
         </div>
       </div>

@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { X, Plus } from 'lucide-react';
 import { Nft, tokenCode } from '../model/Nft';
 import { useState } from 'react';
 
@@ -146,7 +145,7 @@ const NftSelector = (props: INftSelectorProps) => {
             className='transition-colors text-stone-400 hover:text-white'
             onClick={props.onCloseClick}
           >
-            <FontAwesomeIcon icon={faXmark} className='text-xl' />
+            <X className='w-6 h-6' />
           </button>
         </div>
         <div className='p-6'>
@@ -165,11 +164,11 @@ const NftSelector = (props: INftSelectorProps) => {
               </select>
             )}
             <div className='flex flex-col gap-2'>
-              <label className='text-sm text-white'>Enter OCM Genesis ID number (1-9999)</label>
+              <label className='mb-2 text-base text-white md:text-lg'>Enter OCM GENESIS #ID</label>
               <div className='flex items-center gap-2'>
                 <span className='text-2xl font-medium text-white'>#</span>
                 <input
-                  className='flex-1 px-4 py-3 text-lg text-white bg-[#3b3b3b] rounded-md border border-gray-600 focus:outline-none focus:border-green-500'
+                  className='flex-1 px-4 py-3 text-lg text-white bg-[#3b3b3b] rounded-md border border-gray-600 focus:outline-none focus:border-[#00FFFF]'
                   type='text'
                   value={tokenInput}
                   onChange={(e) => {
@@ -177,13 +176,13 @@ const NftSelector = (props: INftSelectorProps) => {
                     setErrorMessage('');
                   }}
                   onKeyPress={handleKeyPress}
-                  placeholder='1-9999'
+                  placeholder='i.e 1 or 234 or 5678'
                 />
                 <button
-                  className='px-4 py-3 text-white transition-colors bg-green-500 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50'
+                  className='px-4 py-3 text-black transition-colors bg-[#00FFFF] rounded-md hover:bg-[#00cccc] focus:outline-none focus:ring-2 focus:ring-[#00FFFF] focus:ring-opacity-50'
                   onClick={createNftFromToken}
                 >
-                  <FontAwesomeIcon icon={faPlus} className='text-xl' />
+                  <Plus className='w-5 h-5' />
                 </button>
               </div>
               {errorMessage && (

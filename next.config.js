@@ -29,11 +29,6 @@ const nextConfig = {
   poweredByHeader: false,
   // Enable static exports if needed
   // output: 'export',
-  experimental: {
-    outputFileTracingIncludes: {
-      './pages/api/screenshot': ['./public/backdrops/**/*', './public/*.png'],
-    },
-  },
   webpack(config) {
     config.module.rules.push({
       test: /\.(woff|woff2|eot|ttf|otf)$/i,

@@ -17,6 +17,10 @@ const sizes: Size[] = [
     size: 'wuxga',
     label: 'Full Set Friday',
   },
+  {
+    size: 'coming_soon',
+    label: 'More Soon',
+  },
 ];
 
 const LayoutSelector = ({ colId = '', themeUpdated }: Props) => {
@@ -45,13 +49,14 @@ const LayoutSelector = ({ colId = '', themeUpdated }: Props) => {
     
     // Get available sizes for this collection
     const fs = sizes.filter(
-      (s) => themeFilteredByCode.filter((f) => f.size === s.size).length > 0
+      (s) => s.size === 'coming_soon' || themeFilteredByCode.filter((f) => f.size === s.size).length > 0
     );
     setFilteredSizes(fs);
     
     // If no size is selected and sizes are available, select the first size
     if (filter.size === '' && fs.length > 0) {
-      setFilter({ size: fs[0].size, themeId: filter.themeId });
+      const firstAvailableSize = fs.find(s => s.size !== 'coming_soon')?.size || fs[0].size;
+      setFilter({ size: firstAvailableSize, themeId: filter.themeId });
       return;
     }
 
@@ -107,11 +112,12 @@ const LayoutSelector = ({ colId = '', themeUpdated }: Props) => {
                     onClick={() => sizeSelect(item.size)}
                     aria-label={`Select ${item.label} layout`}
                     aria-pressed={filter.size === item.size}
-                    className={`inline-flex p-2 rounded-lg text-white hover:text-sj-neon cursor-pointer ${
+                    className={`inline-flex p-2 rounded-lg text-white hover:text-[#00FFFF] cursor-pointer ${
                       filter.size === item.size
-                        ? 'font-bold'
-                        : ''
+                        ? 'text-[#00FFFF] font-bold'
+                        : item.size === 'coming_soon' ? 'opacity-50 cursor-not-allowed hover:text-white' : ''
                     }`}
+                    disabled={item.size === 'coming_soon'}
                   >
                     {item.label}
                   </button>
@@ -122,13 +128,13 @@ const LayoutSelector = ({ colId = '', themeUpdated }: Props) => {
 
         <div className="w-full h-px my-2 bg-gray-700 opacity-30"></div>
 
-        <div className='relative mt-2 text-left'>
+        <div className='relative -mt-1 text-left'>
           {filteredThemes.map((theme) => (
             <button
-              className={`inline-block px-2 py-1 mt-2 rounded-sm mr-2 hover:bg-sj-neon hover:text-black cursor-pointer ${
+              className={`inline-block px-2 py-1 mr-2 text-white hover:text-[#00FFFF] cursor-pointer ${
                 filter.themeId === theme.id
-                  ? 'bg-slate-600 text-white'
-                  : 'bg-white text-black'
+                  ? 'text-[#00FFFF] font-bold'
+                  : ''
               }`}
               key={theme.id}
               aria-label={`Select ${theme.name} theme`}

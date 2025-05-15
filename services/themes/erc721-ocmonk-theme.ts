@@ -126,7 +126,7 @@ const wuxga: ITheme[] = [
   {
     id: 'HNCOSKG6TEtVlWA',
     code: 'ONCHAINMONKEY',
-    name: 'Landscape',
+    name: 'Style 1',
     author: {
       name: 'HEAVY D',
       url: 'https://twitter.com/dheavyside',

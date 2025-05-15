@@ -13,17 +13,18 @@
 }
 
 .button {
-  background-color: initial;
+  background-color: #1d1f24;
   color: whitesmoke;
-  background-image: linear-gradient(-180deg, #252827, #262b29);
-  border-radius: 5px;
+  border: 2px solid #00FFFF;
+  border-radius: 8px;
   box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
-  font-family: 'Bebas Neue', 'Courier New', Courier, monospace;
-  letter-spacing: 3px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.5px;
   cursor: pointer;
   display: inline-block;
   height: 44px;
-  line-height: 44px;
+  line-height: 40px;
   outline: 0;
   overflow: hidden;
   padding: 0 20px;
@@ -36,11 +37,16 @@
   vertical-align: top;
   white-space: nowrap;
   width: 100%;
+  transition: all 0.2s ease;
+  
   @include break-point(small) {
     width: auto;
   }
-  z-index: 2;
-  border: 0;
+  
+  &:hover {
+    background-color: #00FFFF;
+    color: #1d1f24;
+  }
 
   em {
     font-style: normal;
@@ -51,22 +57,22 @@
   }
 
   &.success {
-    color: #252827;
-    background-image: linear-gradient(-180deg, #00d775, #00bd68);
-  }
-  &.danger {
-    background-image: linear-gradient(-180deg, #d70056, #bd005b);
-  }
-
-  &:hover {
-    background: #282a29;
-
-    &.success {
-      background: #00bd68;
+    border-color: #00d775;
+    color: #00d775;
+    
+    &:hover {
+      background-color: #00d775;
+      color: #1d1f24;
     }
-
-    &.danger {
-      background: #bd005b;
+  }
+  
+  &.danger {
+    border-color: #ff4444;
+    color: #ff4444;
+    
+    &:hover {
+      background-color: #ff4444;
+      color: #1d1f24;
     }
   }
 }

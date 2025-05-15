@@ -1,11 +1,10 @@
-@ -1,6 +1,23 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas, loadImage, Canvas, Image } from 'canvas';
 import path from 'path';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
-@ -8,24 +25,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
+    return res.status(405).json({ message: 'Method not allowed' });
   }
 
   try {
@@ -30,8 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Get NFT IDs and filter out placeholder IDs (those starting with '-')
     const allNftIds = nfts.split(',');
     const validNftIds = allNftIds.filter((id: string) => !id.startsWith('-'));
-@ -34,135 +39,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
-    
+
     // Early return if no valid NFTs
     if (validNftIds.length === 0) {
       const buffer = canvas.toBuffer('image/png');
@@ -130,7 +128,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       loadNftImage(primeUrl, katoshiPrimePlaceholder)
     ]);
     
-    console.log("Images loaded for positions:", images.map((img, idx) => 
+    console.log("Images loaded for positions:", images.map((img: Image | null, idx: number) => 
       img ? `Position ${idx} (${idx === 0 ? 'Genesis' : idx === 1 ? 'Classic' : 'Prime'})` : `Position ${idx} (empty)`
     ));
 
@@ -142,7 +140,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ];
 
     // Draw NFT images
-    images.forEach((image, index) => {
+    images.forEach((image: Image | null, index: number) => {
       if (image && index < positions.length) {
         const pos = positions[index];
         console.log(`Drawing NFT at position ${index} (${pos.x}, ${pos.y}) - Type: ${index === 0 ? 'Genesis' : index === 1 ? 'Classic' : 'Prime'}`);
@@ -166,3 +164,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ 
       message: 'Error generating image',
       error: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+}

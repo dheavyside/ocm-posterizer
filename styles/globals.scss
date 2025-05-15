@@ -4,16 +4,21 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Bebas Neue', 'Courier New', Courier, monospace;
-  letter-spacing: 3px;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.5px;
   overflow-x: hidden;
   color: #ffffff;
   background-color: #1d1f24;
 }
 
 a {
-  color: #69f5ff;
+  color: #00FFFF;
   text-decoration: none;
+  transition: color 0.2s ease;
+  
+  &:hover {
+    color: darken(#00FFFF, 15%);
+  }
 }
 
 * {
@@ -26,6 +31,6 @@ a {
   }
   body {
     color: #ffffff;
-    background-color: #1d1f24; //#34363a
+    background-color: #1d1f24;
   }
 }

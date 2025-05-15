@@ -4,12 +4,17 @@ import Nav from './Nav';
 
 interface LayoutProps {
   children: ReactNode;
+  navProps?: {
+    onShare?: () => void;
+    showShare?: boolean;
+    collectionName?: string;
+  };
 }
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children, navProps }: LayoutProps) {
   return (
     <>
-      <Nav />
+      <Nav {...navProps} />
       <div className='min-h-[calc(100vh-60px)] flex flex-col justify-space-between'>
         <main>{children}</main>
         <Footer />

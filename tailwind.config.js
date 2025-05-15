@@ -28,10 +28,11 @@ module.exports = {
         current: 'currentColor',
         black: '#000',
         white: '#fff',
+        highlight: '#00FFFF',
         
         // SJ colors
         'sj': {
-          neon: '#00f3b8',
+          neon: '#00FFFF',
           orange: '#FF9900',
         },
         
@@ -41,6 +42,9 @@ module.exports = {
           purple: '#383476',
           gold: '#D8B52A',
         },
+      },
+      fontFamily: {
+        sans: ['Space Grotesk', 'sans-serif'],
       },
       backgroundImage: {
         // CoiW images - using modern pattern
