@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { ITheme } from '../model/Theme';
 import { themes } from '../services/ThemeProvider';
 
@@ -40,6 +40,14 @@ const LayoutSelector = ({ colId = '', themeUpdated }: Props) => {
     );
   };
 
+  const themeSelect = useCallback((value: string): void => {
+    setFilter((prev) => ({ size: prev.size, themeId: value }));
+    const selectedTheme = themes.find((theme) => theme.id === value);
+    if (themeUpdated && selectedTheme) {
+      themeUpdated(selectedTheme);
+    }
+  }, [themeUpdated]);
+
   useEffect(() => {
     // Skip if colId is empty
     if (!colId) return;
@@ -71,7 +79,7 @@ const LayoutSelector = ({ colId = '', themeUpdated }: Props) => {
     if (!filter.themeId && themeFilteredBySize.length > 0) {
       themeSelect(themeFilteredBySize[0].id);
     }
-  }, [filter, colId]);
+  }, [filter, colId, themeSelect]);
 
   function sizeSelect(value: string): void {
     const filtered = filterThemesByCode(themes, colId || '').filter(
@@ -89,14 +97,6 @@ const LayoutSelector = ({ colId = '', themeUpdated }: Props) => {
       } else {
         themeUpdated(null);
       }
-    }
-  }
-
-  function themeSelect(value: string): void {
-    setFilter({ size: filter.size, themeId: value });
-    const selectedTheme = themes.find((theme) => theme.id === value);
-    if (themeUpdated && selectedTheme) {
-      themeUpdated(selectedTheme);
     }
   }
 
