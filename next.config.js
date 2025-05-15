@@ -22,7 +22,6 @@ const nextConfig = {
         pathname: '**',
       }
     ],
-    unoptimized: true, // Set all images as unoptimized to bypass Next.js image optimization
   },
   reactStrictMode: true,
   swcMinify: true,
