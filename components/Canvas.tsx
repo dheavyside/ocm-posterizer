@@ -1,13 +1,65 @@
 import { Nft } from '../model/Nft';
 import { ITheme, ThemeSize } from '../model/Theme';
-import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 import { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faRefresh } from '@fortawesome/free-solid-svg-icons';
 import AvatarImage from './AvatarImage';
+import BackgroundSelector from './BackgroundSelector';
 import StickerImage from './StickerImage';
 import Loading from './Loading';
 import Parser from 'html-react-parser';
+
+// Add a function to prepare elements before capture
+function prepareImagesForCapture() {
+  // Find all images in the capture area
+  const images = document.querySelectorAll('#capture img');
+  
+  // Store original sources to restore after capture
+  const originalSources: {element: HTMLImageElement, src: string}[] = [];
+  
+  // Process each image
+  images.forEach((img) => {
+    const imgElement = img as HTMLImageElement;
+    
+    // Skip images that are already data URLs
+    if (imgElement.src.startsWith('data:')) return;
+    
+    // Store original source
+    originalSources.push({element: imgElement, src: imgElement.src});
+    
+    // Set crossOrigin attribute
+    imgElement.crossOrigin = 'anonymous';
+    
+    // Create a canvas to draw the image
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Only proceed if we can get context and the image is loaded
+    if (ctx && imgElement.complete && imgElement.naturalWidth > 0) {
+      canvas.width = imgElement.naturalWidth;
+      canvas.height = imgElement.naturalHeight;
+      ctx.drawImage(imgElement, 0, 0);
+      
+      try {
+        // Try to convert to data URL
+        const dataUrl = canvas.toDataURL('image/png');
+        imgElement.src = dataUrl;
+      } catch (e) {
+        console.log('Could not convert image', e);
+      }
+    }
+  });
+  
+  return originalSources;
+}
+
+// Add a function to restore images after capture
+function restoreImages(originalSources: {element: HTMLImageElement, src: string}[]) {
+  originalSources.forEach(({element, src}) => {
+    element.src = src;
+  });
+}
 
 type BackgroundStyle = {
   backgroundColor?: string;
@@ -24,6 +76,26 @@ type Props = {
   onDownload?: (src: string) => void;
 };
 
+// Add type declaration for dom-to-image module
+declare module 'dom-to-image' {
+  export function toPng(
+    node: HTMLElement, 
+    options?: { width?: number }
+  ): Promise<string>;
+  export function toJpeg(
+    node: HTMLElement, 
+    options?: { width?: number, quality?: number }
+  ): Promise<string>;
+  export function toBlob(
+    node: HTMLElement, 
+    options?: { width?: number }
+  ): Promise<Blob>;
+  export function toSvg(
+    node: HTMLElement, 
+    options?: { width?: number }
+  ): Promise<string>;
+}
+
 export default function Canvas({
   data,
   theme,
@@ -34,9 +106,127 @@ export default function Canvas({
   const [customBackground, setCustomBackground] = useState<BackgroundStyle>({});
   const captureRef = useRef<HTMLDivElement>(null);
 
-  async function generateImage() {
-    if (!theme) return Promise.reject('No theme selected');
+  // Function to proxy an image URL
+  function getProxiedImageUrl(originalUrl: string): string {
+    return `/api/imageProxy?url=${encodeURIComponent(originalUrl)}`;
+  }
+  
+  // Preprocess images to use the proxy
+  function preprocessImages() {
+    // Find all img elements in the capture area
+    const imgElements = document.querySelectorAll('#capture img') as NodeListOf<HTMLImageElement>;
+    
+    // Keep track of original sources
+    const originalSources: {element: HTMLImageElement, src: string}[] = [];
+    
+    // Process each image
+    imgElements.forEach(img => {
+      // Skip if already using data URL or our proxy
+      if (img.src.startsWith('data:') || img.src.includes('/api/imageProxy')) {
+        return;
+      }
+      
+      // Store original source
+      originalSources.push({element: img, src: img.src});
+      
+      // Replace with proxied URL
+      img.src = getProxiedImageUrl(img.src);
+    });
+    
+    return originalSources;
+  }
+  
+  // Restore original image sources
+  function restoreImages(originals: {element: HTMLImageElement, src: string}[]) {
+    originals.forEach(({element, src}) => {
+      element.src = src;
+    });
+  }
 
+  useEffect(() => {
+    if (downloading && theme) {
+      // First try dom-to-image with triple call pattern
+      // Apply proxy to images first
+      const originalSources = preprocessImages();
+      
+      generateClientSideImage()
+        .then(dataUrl => {
+          // Restore original image sources
+          restoreImages(originalSources);
+          handleSuccessfulDownload(dataUrl);
+        })
+        .catch(error => {
+          console.error('Client-side image generation failed, falling back to server:', error);
+          
+          // Restore original image sources
+          restoreImages(originalSources);
+          
+          // Fall back to server-side API
+          generateServerSideImage()
+            .then(dataUrl => {
+              handleSuccessfulDownload(dataUrl);
+            })
+            .catch(serverError => {
+              console.error('Server-side image generation also failed:', serverError);
+              setDownloading(false);
+            });
+        });
+    }
+  }, [downloading, theme, onDownload, data]);
+
+  // Client-side generation using dom-to-image
+  async function generateClientSideImage(): Promise<string> {
+    if (!theme) return Promise.reject('No theme selected');
+    
+    // Triple attempt pattern from original code
+    try {
+      await domToImagePromise(); // First attempt to prime caches
+      await domToImagePromise(); // Second attempt
+      return await domToImagePromise(); // Final attempt - return the result
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Individual dom-to-image promise
+  function domToImagePromise(): Promise<string> {
+    if (!theme) return Promise.reject('No theme selected');
+    
+    const printWidth = new Map<ThemeSize, number>([
+      ['twitter_banner', 1450],
+      ['facebook_banner', 1450],
+      ['opensea_banner', 1450],
+      ['wuxga', 1920],
+      ['square', 950],
+      ['pillar', 950],
+      ['tower', 950],
+    ]);
+
+    return new Promise((resolve, reject) => {
+      const element = document.querySelector('#capture');
+      if (!element) {
+        return reject('Capture element not found');
+      }
+      
+      domtoimage
+        .toPng(element, {
+          width: printWidth.get(theme.size),
+          imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=='
+        })
+        .then(function (dataUrl) {
+          return resolve(dataUrl);
+        })
+        .catch(function (error) {
+          console.error('Dom-to-image failed:', error);
+          reject(error);
+        });
+    });
+  }
+
+  // Server-side generation fallback
+  async function generateServerSideImage(): Promise<string> {
+    if (!theme) return Promise.reject('No theme selected');
+    
     try {
       // Filter out placeholder NFTs (those with IDs starting with '-')
       const validNfts = data.filter(nft => !nft.id.startsWith('-'));
@@ -60,32 +250,22 @@ export default function Canvas({
       const blob = await response.blob();
       return URL.createObjectURL(blob);
     } catch (error) {
-      console.error('Error generating image:', error);
+      console.error('Error generating image on server:', error);
       throw error;
     }
   }
 
-  useEffect(() => {
-    if (downloading && theme) {
-      generateImage()
-        .then((dataUrl) => {
-          if (dataUrl) {
-            if (onDownload) {
-              // Let the parent handle the download
-              onDownload(dataUrl);
-            } else {
-              // Only if parent doesn't have an onDownload handler
-              downloadURI(dataUrl, `${theme.name}.png`);
-            }
-          }
-          setDownloading(false);
-        })
-        .catch((error) => {
-          console.error('Error generating image:', error);
-          setDownloading(false);
-        });
+  // Handle successful download from either method
+  function handleSuccessfulDownload(dataUrl: string) {
+    if (onDownload) {
+      // Let the parent handle the download
+      onDownload(dataUrl);
+    } else {
+      // Only if parent doesn't have an onDownload handler
+      downloadURI(dataUrl, `${theme!.name}.png`);
     }
-  }, [downloading, theme, onDownload]);
+    setDownloading(false);
+  }
 
   function downloadURI(uri: string, name: string) {
     var link = document.createElement('a');
@@ -116,6 +296,9 @@ export default function Canvas({
           downloading ? 'printing' : ''
         }`}
       >
+        <div>
+          <BackgroundSelector onChange={setBackground} />
+        </div>
         <div className={`main-wrapper ${theme.classNames} `}>
           <div
             id='capture'
@@ -194,11 +377,18 @@ export default function Canvas({
         </div>
         <div className='phone:float-right space-x-2 > * + *'>
           <button
+            className='text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md inline-flex items-center'
+            onClick={() => setBackground({})}
+          >
+            <FontAwesomeIcon icon={faRefresh} className='mr-1' /> Default
+          </button>
+
+          <button
             disabled={downloading}
-            className='inline-flex items-center px-6 py-3 text-base font-bold text-gray-800 rounded-md bg-sj-neon hover:bg-sj-yellow hover:text-white'
+            className='text-sm bg-sj-blue hover:bg-sj-yellow hover:text-sj-blue text-white font-bold py-2 px-4 rounded-md inline-flex items-center'
             onClick={() => setDownloading(true)}
           >
-            <FontAwesomeIcon icon={faDownload} className='mr-2' /> Download
+            <FontAwesomeIcon icon={faDownload} className='mr-1' /> Download
           </button>
         </div>
       </div>

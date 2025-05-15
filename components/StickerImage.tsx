@@ -27,6 +27,7 @@ export default function StickerImage({
         width={575}
         height={575}
         priority={true}
+        crossOrigin="anonymous"
         style={{ 
           objectFit: 'contain',
           width: '100%',

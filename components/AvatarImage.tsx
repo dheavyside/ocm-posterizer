@@ -22,18 +22,31 @@ export default function AvatarImage({
     classes += ' stamp';
   }
 
+  // Function to get proxied image URL for external images
+  const getImageUrl = (url: string, isPlaceholder: boolean): string => {
+    // Don't proxy placeholder images
+    if (isPlaceholder) return url;
+    
+    // Use proxy for external URLs
+    return `/api/imageProxy?url=${encodeURIComponent(url)}`;
+  };
+
+  const isPlaceholder = data[index].id.startsWith('-');
+  const imageUrl = getImageUrl(data[index].image_url, isPlaceholder);
+
   return (
     <div className={classes} style={{ position: 'absolute' }}>
       <Image
         key={index}
         data-index={index}
-        src={data[index].image_url}
+        src={imageUrl}
         alt={data[index].id || "NFT Image"}
         onClick={() => onAvatarClick?.(index)}
         width={575}
         height={575}
         priority={true}
-        unoptimized={data[index].id.startsWith('-')} // Don't optimize placeholder images
+        crossOrigin="anonymous"
+        unoptimized={isPlaceholder} // Don't optimize placeholder images
         style={{ 
           objectFit: 'contain',
           width: '100%',

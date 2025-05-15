@@ -22,7 +22,7 @@ const nextConfig = {
         pathname: '**',
       }
     ],
-    unoptimized: process.env.NODE_ENV === 'development', // Disable optimization in development
+    unoptimized: true, // Set all images as unoptimized to bypass Next.js image optimization
   },
   reactStrictMode: true,
   swcMinify: true,
