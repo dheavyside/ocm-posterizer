@@ -1,7 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LayoutTemplate, Share2 } from 'lucide-react';
+import { LayoutTemplate, ExternalLink } from 'lucide-react';
+import { COLLECTIONS } from '../data/collections';
 
 interface NavProps {
   onShare?: () => void;
@@ -10,6 +11,8 @@ interface NavProps {
 }
 
 export default function Nav({ onShare, showShare, collectionName }: NavProps) {
+  const collection = COLLECTIONS.find(col => col.name === collectionName);
+  
   return (
     <nav className='bg-[#16181d] text-white'>
       <div className='container mx-auto px-4 h-[60px] relative flex items-center justify-between'>
@@ -27,14 +30,14 @@ export default function Nav({ onShare, showShare, collectionName }: NavProps) {
           </div>
         </Link>
 
-        {/* OCM Logo in the middle */}
+        {/* Collection Logo in the middle */}
         <div className='absolute flex items-center -translate-x-1/2 left-1/2'>
-          {collectionName === 'OnChain Monkey' && (
+          {collection && (
             <Image
-              src="/logos/OCMLogo-W-H.png"
+              src={collection.navLogo}
               width={140}
               height={42}
-              alt="OCM Logo"
+              alt={`${collection.name} Logo`}
               priority
               style={{ width: 'auto', height: '42px' }}
             />
@@ -43,14 +46,15 @@ export default function Nav({ onShare, showShare, collectionName }: NavProps) {
 
         {/* Right side content */}
         <div>
-          {showShare ? (
-            <button 
-              onClick={onShare}
+          {showShare && collection ? (
+            <Link 
+              href={collection.website}
+              target="_blank"
               className='flex items-center gap-2 text-sm font-medium text-white hover:text-[#00FFFF] transition-colors'
             >
-              Share
-              <Share2 size={18} />
-            </button>
+              Visit {collection.name}
+              <ExternalLink size={18} />
+            </Link>
           ) : !collectionName && (
             <span className='text-sm text-slate-400'>by Metablend Studios</span>
           )}

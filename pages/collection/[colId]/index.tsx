@@ -13,16 +13,7 @@ import {
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
-
-const message = [
-  "!RISE",
-  'The monkeys will not be stopped!',
-  "Danny is cooking...",
-  "Who is Monkey King?",
-  'I love WAXL!',
-  'Magic Monks 4 Eva',
-  'Hi, Andy!',
-];
+import { Analytics } from "@vercel/analytics/next";
 
 type Props = {
   collectionId: string;
@@ -55,7 +46,7 @@ export default function Home({ collectionId, collection, navProps }: Props) {
   };
 
   const themeUpdated = (newTheme: ITheme) => {
-    setGreeting(message[Math.floor(Math.random() * message.length)]);
+    setGreeting(collection.greetings[Math.floor(Math.random() * collection.greetings.length)]);
     setTheme(newTheme);
   };
 
@@ -156,6 +147,7 @@ export default function Home({ collectionId, collection, navProps }: Props) {
           selectedSlot={selectedIndex}
         />
       </div>
+      <Analytics />
     </>
   );
 }

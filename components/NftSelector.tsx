@@ -134,25 +134,25 @@ const NftSelector = (props: INftSelectorProps) => {
         props.visible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
-      <div className={`bg-[#1a1a1a] rounded-lg shadow-xl transform transition-transform duration-200 w-[24rem] max-w-[95vw] ${
+      <div className={`bg-[#1a1a1a] rounded-lg shadow-xl transform transition-transform duration-200 w-[min(90vw,24rem)] ${
         props.visible ? 'scale-100' : 'scale-95'
       }`}>
-        <div className='flex items-center justify-between p-4 border-b border-gray-700'>
-          <h2 className='text-lg font-semibold text-white'>
+        <div className='flex items-center justify-between p-[3vw] sm:p-4 border-b border-gray-700'>
+          <h2 className='text-[4.5vw] sm:text-lg font-semibold text-white'>
             {props.isFullSetFriday ? 'Select Full Set' : 'Select NFT'}
           </h2>
           <button
             className='transition-colors text-stone-400 hover:text-white'
             onClick={props.onCloseClick}
           >
-            <X className='w-6 h-6' />
+            <X className='w-[5vw] h-[5vw] sm:w-6 sm:h-6' />
           </button>
         </div>
-        <div className='p-6'>
-          <div className='flex flex-col gap-4'>
+        <div className='p-[4vw] sm:p-6 w-full'>
+          <div className='flex flex-col gap-[3vw] sm:gap-4 w-full'>
             {!props.isFullSetFriday && (
               <select
-                className='px-3 py-2 text-base text-white bg-[#3b3b3b] rounded-md border border-gray-600 focus:outline-none focus:border-green-500'
+                className='w-full px-[3vw] py-[2vw] sm:px-3 sm:py-2 text-[3.8vw] sm:text-base text-white bg-[#3b3b3b] rounded-md border border-gray-600 focus:outline-none focus:border-green-500'
                 name='nfts'
                 id='collectionId'
                 onChange={(e) => setSelectedCollection(e.target.value as tokenCode)}
@@ -163,30 +163,33 @@ const NftSelector = (props: INftSelectorProps) => {
                 <option value='KATOSHI_PRIME'>Katoshi Prime</option>
               </select>
             )}
-            <div className='flex flex-col gap-2'>
-              <label className='mb-2 text-base text-white md:text-lg'>Enter OCM GENESIS #ID</label>
-              <div className='flex items-center gap-2'>
-                <span className='text-2xl font-medium text-white'>#</span>
-                <input
-                  className='flex-1 px-4 py-3 text-lg text-white bg-[#3b3b3b] rounded-md border border-gray-600 focus:outline-none focus:border-[#00FFFF]'
-                  type='text'
-                  value={tokenInput}
-                  onChange={(e) => {
-                    setTokenInput(e.target.value);
-                    setErrorMessage('');
-                  }}
-                  onKeyPress={handleKeyPress}
-                  placeholder='i.e 1 or 234 or 5678'
-                />
+            <div className='flex flex-col gap-[2vw] sm:gap-2 w-full'>
+              <label className='mb-[2vw] sm:mb-2 text-[3.8vw] sm:text-base text-white md:text-lg'>Enter OCM GENESIS #ID</label>
+              <div className='flex items-center gap-[2vw] sm:gap-2 w-full'>
+                <span className='text-[6vw] sm:text-2xl font-medium text-white shrink-0'>#</span>
+                <div className='flex-1 min-w-0 max-w-[75%] sm:max-w-none'>
+                  <input
+                    className='w-full min-w-0 px-3 py-3 text-[4vw] sm:text-lg text-white text-left placeholder:text-left placeholder:text-gray-400 bg-[#3b3b3b] rounded-md border border-gray-600 focus:outline-none focus:border-[#00FFFF]'
+                    type='text'
+                    value={tokenInput}
+                    onChange={(e) => {
+                      setTokenInput(e.target.value);
+                      setErrorMessage('');
+                    }}
+                    onKeyPress={handleKeyPress}
+                    placeholder='i.e 1 or 234 or 5678'
+                    style={{ textAlign: 'left' }}
+                  />
+                </div>
                 <button
-                  className='px-4 py-3 text-black transition-colors bg-[#00FFFF] rounded-md hover:bg-[#00cccc] focus:outline-none focus:ring-2 focus:ring-[#00FFFF] focus:ring-opacity-50'
+                  className='shrink-0 w-12 h-12 flex items-center justify-center text-black transition-colors bg-[#00FFFF] rounded-md hover:bg-[#00cccc] focus:outline-none focus:ring-2 focus:ring-[#00FFFF] focus:ring-opacity-50'
                   onClick={createNftFromToken}
                 >
-                  <Plus className='w-5 h-5' />
+                  <Plus className='w-6 h-6' />
                 </button>
               </div>
               {errorMessage && (
-                <p className='mt-1 text-sm text-red-500'>{errorMessage}</p>
+                <p className='mt-[2vw] sm:mt-1 text-[3vw] sm:text-sm text-red-500'>{errorMessage}</p>
               )}
             </div>
           </div>
