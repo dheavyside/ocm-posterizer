@@ -148,6 +148,31 @@ const wuxga: ITheme[] = [
       },
     ],
   },
+  {
+    id: 'WUXGA2STYLE2OCM',
+    code: 'ONCHAINMONKEY',
+    name: 'Style 2',
+    author: {
+      name: 'HEAVY D',
+      url: 'https://twitter.com/dheavyside',
+    },
+    size: 'wuxga',
+    classNames: 'wuxga',
+    backdrop: {
+      classNames: `${styles.wuxga_2} bg-ocmonk-wuxga-2 bg-size--cover`,
+    },
+    nfts: [
+      {
+        classNames: `${styles.first} height--40 top--24`,
+      },
+      {
+        classNames: `${styles.second} height--40 top--24`,
+      },
+      {
+        classNames: `${styles.third} height--40 top--24`,
+      },
+    ],
+  },
 ];
 
 export const ERC721_OCMONK_THEMES: ITheme[] = [

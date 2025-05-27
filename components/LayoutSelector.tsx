@@ -112,10 +112,12 @@ const LayoutSelector = ({ colId = '', themeUpdated }: Props) => {
                     onClick={() => sizeSelect(item.size)}
                     aria-label={`Select ${item.label} layout`}
                     aria-pressed={filter.size === item.size}
-                    className={`inline-flex p-2 rounded-lg text-white hover:text-[#00FFFF] cursor-pointer ${
+                    className={`inline-flex p-2 rounded-lg cursor-pointer transition-all duration-200 ${
                       filter.size === item.size
                         ? 'text-[#00FFFF] font-bold'
-                        : item.size === 'coming_soon' ? 'opacity-50 cursor-not-allowed hover:text-white' : ''
+                        : item.size === 'coming_soon' 
+                          ? 'text-white opacity-50 cursor-not-allowed' 
+                          : 'text-white hover:text-[#00FFFF]'
                     }`}
                     disabled={item.size === 'coming_soon'}
                   >
@@ -131,10 +133,10 @@ const LayoutSelector = ({ colId = '', themeUpdated }: Props) => {
         <div className='relative -mt-1 text-left'>
           {filteredThemes.map((theme) => (
             <button
-              className={`inline-block px-2 py-1 mr-2 text-white hover:text-[#00FFFF] cursor-pointer ${
+              className={`inline-block px-2 py-1 mr-2 cursor-pointer transition-all duration-200 rounded ${
                 filter.themeId === theme.id
                   ? 'text-[#00FFFF] font-bold'
-                  : ''
+                  : 'text-white hover:text-[#00FFFF]'
               }`}
               key={theme.id}
               aria-label={`Select ${theme.name} theme`}

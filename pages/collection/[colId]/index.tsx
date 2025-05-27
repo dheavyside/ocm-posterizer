@@ -147,7 +147,7 @@ export default function Home({ collectionId, collection, navProps }: Props) {
           selectedSlot={selectedIndex}
         />
       </div>
-      <Analytics />
+      {process.env.NODE_ENV === 'production' && <Analytics />}
     </>
   );
 }

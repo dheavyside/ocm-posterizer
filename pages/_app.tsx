@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }: AppProps<PageProps>) {
   return (
     <Layout navProps={pageProps.navProps}>
       <Component {...pageProps} />
-      <Analytics />
+      {process.env.NODE_ENV === 'production' && <Analytics />}
     </Layout>
   );
 }
